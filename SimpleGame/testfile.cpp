@@ -16,21 +16,26 @@ but WITHOUT ANY WARRANTY.
 #include "Renderer.h"
 
 #include "battleship_basic.h"
+#include "object.h"
 
 Renderer *g_Renderer = NULL;
 battleship* prototype = NULL;
+object* testobject = NULL;
 
 void RenderScene(void)
 {
-	//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	//glClearColor(0.0f, 0.3f, 0.3f, 1.0f);
-
 	//// Renderer Test
 	//g_Renderer->DrawSolidRect(0, 0, 0, 4, 1, 0, 1, 1);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glClearColor(0.0f, 0.3f, 0.3f, 1.0f);
 
-	//glutSwapBuffers();
 
 	prototype->draw();
+	testobject->draw();
+
+
+	glutSwapBuffers();
+	
 }
 
 void Idle(void)
@@ -74,6 +79,13 @@ void SpecialKeyInput(int key, int x, int y)
 {
 }
 
+void timer(int value)
+{
+	testobject->move_object();
+
+	glutTimerFunc(30, timer, 1);
+}
+
 int main(int argc, char **argv)
 {
 	
@@ -103,16 +115,20 @@ int main(int argc, char **argv)
 	}
 	prototype = new battleship(0, 0);
 
+	testobject = new object();
+
 	glutDisplayFunc(RenderScene);
 	glutIdleFunc(Idle);
 	glutKeyboardFunc(KeyInput);
 	glutMouseFunc(MouseInput);
 	glutSpecialFunc(SpecialKeyInput);
+	glutTimerFunc(30, timer, 1);
 
 	glutMainLoop();
 
 	delete g_Renderer;
 	delete prototype;
+	delete testobject;
 
 	return 0;
 }

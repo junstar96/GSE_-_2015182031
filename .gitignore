@@ -1,0 +1,6 @@
+*.log
+*.pd
+printf
+main
+close
+.vs

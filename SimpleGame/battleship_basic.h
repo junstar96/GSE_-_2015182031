@@ -6,8 +6,8 @@
 
 struct point
 {
-	float x;
-	float y;
+	double x;
+	double y;
 
 };
 
@@ -26,6 +26,7 @@ protected:
 	point battleship_point;
 	status stat;
 	Renderer* image = NULL;
+	float speed;
 
 public:
 	battleship();
@@ -35,5 +36,5 @@ public:
 
 	virtual void move(float x, float y);
 	virtual void draw();
-
+	virtual void update();
 };

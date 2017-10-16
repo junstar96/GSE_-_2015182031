@@ -16,11 +16,14 @@ but WITHOUT ANY WARRANTY.
 #include "Renderer.h"
 
 #include "battleship_basic.h"
+#include "battleship_enemy.h"
 #include "object.h"
 
 Renderer *g_Renderer = NULL;
 battleship* prototype = NULL;
 object* testobject = NULL;
+enemy** testenemy = NULL;
+int enemy_num;
 
 void RenderScene(void)
 {
@@ -32,6 +35,12 @@ void RenderScene(void)
 
 	prototype->draw();
 	testobject->draw();
+	for (int i = 0; i < enemy_num; ++i)
+	{
+		testenemy[i]->draw();
+		
+	}
+
 
 
 	glutSwapBuffers();
@@ -41,11 +50,26 @@ void RenderScene(void)
 void Idle(void)
 {
 	RenderScene();
+
+	prototype->update();
 }
 
 void MouseInput(int button, int state, int x, int y)
 {
-
+	switch (button)
+	{
+	case GLUT_LEFT_BUTTON:
+		if (state == GLUT_UP)
+		{
+			printf("%d %d \n", x, y);
+			if (enemy_num < 10)
+			{
+				testenemy[enemy_num] = new enemy(-x + 250.0, -y + 250.0, 1, 1);
+				enemy_num += 1;
+			}
+		}
+		break;
+	}
 }
 
 void KeyInput(unsigned char key, int x, int y)
@@ -82,13 +106,16 @@ void SpecialKeyInput(int key, int x, int y)
 void timer(int value)
 {
 	testobject->move_object();
-
+	for (int i = 0; i < enemy_num; ++i)
+	{
+		testenemy[i]->update();
+	}
 	glutTimerFunc(30, timer, 1);
 }
 
 int main(int argc, char **argv)
 {
-
+	enemy_num = 0;
 
 	// Initialize GL things
 	glutInit(&argc, argv);
@@ -117,6 +144,8 @@ int main(int argc, char **argv)
 
 	testobject = new object();
 
+	testenemy = new enemy*[10];
+
 	glutDisplayFunc(RenderScene);
 	glutIdleFunc(Idle);
 	glutKeyboardFunc(KeyInput);
@@ -129,6 +158,12 @@ int main(int argc, char **argv)
 	delete g_Renderer;
 	delete prototype;
 	delete testobject;
+
+	for (int i = 0; i < enemy_num; ++i)
+	{
+		delete testenemy[i];
+	}
+	delete testenemy;
 
 	return 0;
 }

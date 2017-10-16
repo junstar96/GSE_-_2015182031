@@ -157,6 +157,7 @@
   <ItemGroup>
     <ClInclude Include="battleship_basic.h" />
     <ClInclude Include="battleship_enemy.h" />
+    <ClInclude Include="bullet.h" />
     <ClInclude Include="object.h" />
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="stdafx.h" />

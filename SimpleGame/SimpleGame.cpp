@@ -52,7 +52,7 @@ void MouseInput(int button, int state, int x, int y)
 	case GLUT_LEFT_BUTTON:
 		if (state == GLUT_UP)
 		{
-			
+			test->get_object(x - 250.0, 250.0 - y);
 		}
 		break;
 	}
@@ -87,7 +87,7 @@ void SpecialKeyInput(int key, int x, int y)
 
 void timer(int value)
 {
-	
+	test->update();
 	glutTimerFunc(30, timer, 1);
 }
 

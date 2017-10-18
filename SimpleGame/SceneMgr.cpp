@@ -9,7 +9,6 @@ SceneMgr::SceneMgr()
 
 SceneMgr::SceneMgr(int get_num) : num(get_num)
 {
-	mainobject = new object*[max];
 	for (int i = 0; i < num; ++i)
 	{
 		mainobject[i] = new object((float)(rand()%500 - 250), (float)(rand()%500 - 250));
@@ -19,7 +18,7 @@ SceneMgr::SceneMgr(int get_num) : num(get_num)
 
 SceneMgr::~SceneMgr()
 {
-	for (int i = 0; i < num; ++i)
+	for (int i = 0; i <= num; ++i)
 	{
 		if (list[i] == true)
 		{
@@ -28,9 +27,20 @@ SceneMgr::~SceneMgr()
 	}
 }
 
+void SceneMgr::update()
+{
+	for (int i = 0; i <= num; ++i)
+	{
+		if (list[i] == true)
+		{
+			mainobject[i]->update();
+		}
+	}
+}
+
 void SceneMgr::draw()
 {
-	for (int i = 0; i < num; ++i)
+	for (int i = 0; i <= num; ++i)
 	{
 		if (list[i] == true)
 		{
@@ -40,12 +50,13 @@ void SceneMgr::draw()
 }
 
 
-void SceneMgr::get_object()
+void SceneMgr::get_object(float x, float y)
 {
 	if (num < max - 1)
 	{
 		num += 1;
-		mainobject[num] = new object();
+		mainobject[num] = new object(x, y);
+		list[num] = true;
 	}
 }
 

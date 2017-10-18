@@ -18,12 +18,10 @@ but WITHOUT ANY WARRANTY.
 #include "battleship_basic.h"
 #include "battleship_enemy.h"
 #include "object.h"
+#include "SceneMgr.h"
 
-Renderer *g_Renderer = NULL;
-battleship* prototype = NULL;
-object* testobject = NULL;
-enemy** testenemy = NULL;
-int enemy_num;
+SceneMgr* test = NULL;
+
 
 void RenderScene(void)
 {
@@ -32,15 +30,8 @@ void RenderScene(void)
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glClearColor(0.0f, 0.3f, 0.3f, 1.0f);
 
-
-	prototype->draw();
-	testobject->draw();
-	for (int i = 0; i < enemy_num; ++i)
-	{
-		testenemy[i]->draw();
-		
-	}
-
+	test->draw();
+	
 
 
 	glutSwapBuffers();
@@ -51,7 +42,7 @@ void Idle(void)
 {
 	RenderScene();
 
-	prototype->update();
+	
 }
 
 void MouseInput(int button, int state, int x, int y)
@@ -61,12 +52,7 @@ void MouseInput(int button, int state, int x, int y)
 	case GLUT_LEFT_BUTTON:
 		if (state == GLUT_UP)
 		{
-			printf("%d %d \n", x, y);
-			if (enemy_num < 10)
-			{
-				testenemy[enemy_num] = new enemy(-x + 250.0, -y + 250.0, 1, 1);
-				enemy_num += 1;
-			}
+			
 		}
 		break;
 	}
@@ -79,23 +65,19 @@ void KeyInput(unsigned char key, int x, int y)
 	{
 	case 'a':
 	case 'A':
-
-		prototype->move(-5.0, 0);
-
 		break;
 
 	case 'd':
 	case 'D':
-		prototype->move(5.0, 0);
+		
 		break;
-
 	case 'w':
 	case 'W':
-		prototype->move(0, 5.0);
+	
 		break;
 	case 's':
 	case 'S':
-		prototype->move(0, -5.0);
+		break;
 	}
 }
 
@@ -105,17 +87,13 @@ void SpecialKeyInput(int key, int x, int y)
 
 void timer(int value)
 {
-	testobject->move_object();
-	for (int i = 0; i < enemy_num; ++i)
-	{
-		testenemy[i]->update();
-	}
+	
 	glutTimerFunc(30, timer, 1);
 }
 
 int main(int argc, char **argv)
 {
-	enemy_num = 0;
+	
 
 	// Initialize GL things
 	glutInit(&argc, argv);
@@ -134,17 +112,9 @@ int main(int argc, char **argv)
 		std::cout << "GLEW 3.0 not supported\n ";
 	}
 
+	test = new SceneMgr(5);
 	// Initialize Renderer
-	g_Renderer = new Renderer(500, 500);
-	if (!g_Renderer->IsInitialized())
-	{
-		std::cout << "Renderer could not be initialized.. \n";
-	}
-	prototype = new battleship(0, 0);
-
-	testobject = new object();
-
-	testenemy = new enemy*[10];
+	
 
 	glutDisplayFunc(RenderScene);
 	glutIdleFunc(Idle);
@@ -155,15 +125,7 @@ int main(int argc, char **argv)
 
 	glutMainLoop();
 
-	delete g_Renderer;
-	delete prototype;
-	delete testobject;
-
-	for (int i = 0; i < enemy_num; ++i)
-	{
-		delete testenemy[i];
-	}
-	delete testenemy;
+	delete test;
 
 	return 0;
 }

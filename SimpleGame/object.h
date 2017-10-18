@@ -18,11 +18,13 @@ protected:
 	int type; 
 	float x;
 	float y;
+	float speed;
 	vect v;
 	Renderer* image = NULL;
 
 public:
 	object();
+	object(float x, float y);
 	~object();
 	
 	void move_object();
@@ -30,5 +32,7 @@ public:
 	void draw();
 
 	void get_object(int x, int y);
+
+	void update();
 
 };

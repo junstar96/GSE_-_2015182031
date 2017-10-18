@@ -1,13 +1,3 @@
-﻿  battleship_basic.cpp
-c:\myfolder\game_software\gse_2_2015182031\simplegame\battleship_basic.cpp(56): warning C4305: '+=': 'double'에서 'float'(으)로 잘립니다.
-c:\myfolder\game_software\gse_2_2015182031\simplegame\battleship_basic.cpp(65): warning C4244: '인수': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-  코드를 생성하고 있습니다...
-  컴파일하고 있습니다...
-  battleship_enemy.cpp
-c:\myfolder\game_software\gse_2_2015182031\simplegame\battleship_enemy.cpp(23): warning C4244: '인수': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-c:\myfolder\game_software\gse_2_2015182031\simplegame\battleship_enemy.cpp(30): warning C4305: '+=': 'double'에서 'float'(으)로 잘립니다.
-  코드를 생성하고 있습니다...
-  SimpleGame.cpp
-c:\myfolder\game_software\gse_2_2015182031\simplegame\simplegame.cpp(67): warning C4244: '인수': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+﻿  SimpleGame.cpp
   SimpleGame.vcxproj -> C:\myfolder\game_software\GSE_2_2015182031\x64\Debug\SimpleGame.exe
   SimpleGame.vcxproj -> C:\myfolder\game_software\GSE_2_2015182031\x64\Debug\SimpleGame.pdb (Partial PDB)

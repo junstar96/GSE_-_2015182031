@@ -3,7 +3,7 @@
 
 object::object()
 {
-	image = new Renderer(1000, 1000);
+	image = new Renderer(500, 500);
 	x = 400;
 	y = 300;
 	v.x = 1;
@@ -12,6 +12,14 @@ object::object()
 	{
 		std::cout << "Renderer could not be initialized.. \n";
 	}
+}
+
+object::object(float x, float y) : x(x), y(y)
+{
+	image = new Renderer(500, 500);
+	v.x = rand() % 2 + 1;
+	v.y = rand() % 2 + 1;
+	
 }
 
 
@@ -81,5 +89,56 @@ void object::draw()
 {
 
 	// Renderer Test
-	image->DrawSolidRect(x, y, 0.0, 16, 1.0, 0.5, 0.5, 1);
+	image->DrawSolidRect(x, y, 0.0, 8, 1.0, 1.0, 1.0, 1);
+}
+
+void object::update()
+{
+	if (x >= 250.0)
+	{
+		v.x = 2;
+	}
+	else if (x <= -250.0)
+	{
+		v.x = 1;
+	}
+
+	if (y >= 250.0)
+	{
+		v.y = 2;
+	}
+	else if (y <= -250.0)
+	{
+		v.y = 1;
+	}
+
+
+
+	switch (v.x)
+	{
+	case 1:
+		x += 5.0;
+		break;
+	case 2:
+		x -= 5.0;
+		break;
+	default:
+		break;
+	}
+
+
+
+	switch (v.y)
+	{
+	case 1:
+		y += 5.0;
+		break;
+	case 2:
+		y -= 5.0;
+		break;
+	default:
+		break;
+	}
+
+
 }

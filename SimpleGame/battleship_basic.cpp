@@ -31,7 +31,7 @@ battleship::battleship(float x, float y)
 
 	speed = 1.0;
 
-	image = new Renderer(1000, 1000);
+	image = new Renderer(500, 500);
 	if (!image->IsInitialized())
 	{
 		std::cout << "Renderer could not be initialized.. \n";

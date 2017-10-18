@@ -31,20 +31,20 @@ void enemy::update()
 	}
 
 
-	if (battleship_point.x >= 500.0)
+	if (battleship_point.x >= 250.0)
 	{
 		vect_x = 2;
 	}
-	else if (battleship_point.x <= -500.0)
+	else if (battleship_point.x <= -250.0)
 	{
 		vect_x = 1;
 	}
 
-	if (battleship_point.y >= 500.0)
+	if (battleship_point.y >= 250.0)
 	{
 		vect_y = 2;
 	}
-	else if (battleship_point.y <= -500.0)
+	else if (battleship_point.y <= -250.0)
 	{
 		vect_y = 1;
 	}

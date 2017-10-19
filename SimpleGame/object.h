@@ -35,4 +35,7 @@ public:
 
 	void update();
 
+	void crash_object(object* there);
+
+	void printf_point();
 };

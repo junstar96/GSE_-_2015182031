@@ -36,6 +36,20 @@ void SceneMgr::update()
 			mainobject[i]->update();
 		}
 	}
+
+	for (int i = 0; i <= num; ++i)
+	{
+		if (list[i] == true)
+		{
+			for (int j = i; j <= num; ++j)
+			{
+				if (list[j] == true)
+				{
+					mainobject[i]->crash_object(mainobject[j]);
+				}
+			}
+		}
+	}
 }
 
 void SceneMgr::draw()
@@ -67,5 +81,14 @@ void SceneMgr::del_object()
 		delete mainobject[num];
 		list[num] = false;
 		num -= 1;
+	}
+}
+
+void SceneMgr::printf_point()
+{
+	for (int i = 0; i < num; ++i)
+	{
+		printf("%dÂ° Á¡ : \n", i);
+		mainobject[i]->printf_point();
 	}
 }

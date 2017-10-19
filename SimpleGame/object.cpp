@@ -142,3 +142,59 @@ void object::update()
 
 
 }
+
+void object::crash_object(object* there)
+{
+	switch (there->v.x)
+	{
+	case 1:
+		if (v.x == 2)
+		{
+			int temp = sqrt((x - there->x)*(x - there->x) + (y - there->y)*(y - there->y));
+
+			if (temp < 2)
+			{
+				there->v.x = 2;
+				v.x = 1;
+			}
+		}
+		break;
+	case 2:
+		if (v.x == 1)
+		{
+			int temp = sqrt((x - there->x)*(x - there->x) + (y - there->y)*(y - there->y));
+
+			if (temp < 2)
+			{
+				there->v.x = 1;
+				v.x = 2;
+			}
+		}
+		break;
+	}
+
+
+	switch (there->v.y)
+	{
+	case 1:
+		if (v.y == 2 && there->x - 2 < x && x < there->x + 2)
+		{
+			there->v.y = 2;
+			v.y = 1;
+		}
+		break;
+	case 2:
+		if (v.y == 1 && there->x - 2 < x && x < there->x + 2)
+		{
+			there->v.y =  1;
+			v.y = 2;
+		}
+		break;
+	}
+}
+
+void object::printf_point()
+{
+	printf("%lf %lf, vec = %d %d\n", x, y, v.x, v.y);
+	
+}

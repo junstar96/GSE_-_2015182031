@@ -88,7 +88,6 @@ void SpecialKeyInput(int key, int x, int y)
 void timer(int value)
 {
 	test->update();
-	system("cls");
 	test->printf_point();
 
 	glutTimerFunc(30, timer, 1);
@@ -115,7 +114,7 @@ int main(int argc, char **argv)
 		std::cout << "GLEW 3.0 not supported\n ";
 	}
 
-	test = new SceneMgr(10);
+	test = new SceneMgr(20);
 	// Initialize Renderer
 	
 

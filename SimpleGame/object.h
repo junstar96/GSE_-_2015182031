@@ -16,9 +16,9 @@ class object
 {
 protected:
 	int type; 
-	float x;
-	float y;
-	float speed;
+	double x;
+	double y;
+	double speed;
 	vect v;
 	Renderer* image = NULL;
 
@@ -35,7 +35,16 @@ public:
 
 	void update();
 
-	void crash_object(object* there);
+	
 
 	void printf_point();
+
+	void const get_vec_x(int vec);
+	void const get_vec_y(int vec);
+
+	double set_x() const;
+	double set_y() const;
+
+	int set_vec_x() const;
+	int set_vec_y() const;
 };

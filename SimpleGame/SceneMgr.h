@@ -23,4 +23,6 @@ public:
 	void draw();
 
 	void printf_point();
+
+	void crash_object(int i, int j);
 };

@@ -34,18 +34,26 @@ void SceneMgr::update()
 		if (list[i] == true)
 		{
 			mainobject[i]->update();
+			mainobject[i]->get_col(0);
 		}
 	}
 
 	for (int i = 0; i <= num; ++i)
 	{
+
 		if (list[i] == true)
 		{
-			for (int j = i; j <= num; ++j)
+			for (int j = i + 1; j <= num; ++j)
 			{
-				if (list[j] == true && i != j)
+				if (list[j] == true)
 				{
-					crash_object(i, j);
+					cul_object(i, j);
+					
+				}
+				
+				if (mainobject[i]->set_col() == 1)
+				{
+					break;
 				}
 			}
 		}
@@ -91,6 +99,25 @@ void SceneMgr::printf_point()
 		printf("%dÂ° Á¡ : \n", i);
 		mainobject[i]->printf_point();
 	}
+}
+
+void SceneMgr::cul_object(int i, int j)
+{
+	
+	double ix = mainobject[i]->set_x();
+	double iy = mainobject[i]->set_y();
+	double jx = mainobject[j]->set_x();
+	double jy = mainobject[j]->set_y();
+
+	if (-8 < ix - jx && ix - jx < 8)
+	{
+		if (-8 < iy - jy && iy - jy < 8)
+		{
+			mainobject[i]->get_col(1);
+			mainobject[j]->get_col(1);
+		}
+	}
+	
 }
 
 void SceneMgr::crash_object(int i, int j)

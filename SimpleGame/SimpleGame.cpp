@@ -114,7 +114,7 @@ int main(int argc, char **argv)
 		std::cout << "GLEW 3.0 not supported\n ";
 	}
 
-	test = new SceneMgr(20);
+	test = new SceneMgr(50);
 	// Initialize Renderer
 	
 

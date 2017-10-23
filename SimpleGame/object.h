@@ -16,6 +16,7 @@ class object
 {
 protected:
 	int type; 
+	int color_num;
 	double x;
 	double y;
 	double speed;
@@ -47,4 +48,14 @@ public:
 
 	int set_vec_x() const;
 	int set_vec_y() const;
+
+	void const get_col(int col)
+	{
+		color_num = col;
+	}
+
+	int set_col() const
+	{
+		return color_num;
+	}
 };

@@ -8,6 +8,7 @@ object::object()
 	y = 300;
 	v.x = 1;
 	v.y = 1;
+	color_num = 0;
 	if (!image->IsInitialized())
 	{
 		std::cout << "Renderer could not be initialized.. \n";
@@ -19,7 +20,7 @@ object::object(float x, float y) : x(x), y(y)
 	image = new Renderer(500, 500);
 	v.x = rand() % 2 + 1;
 	v.y = rand() % 2 + 1;
-	
+	color_num = 0;
 }
 
 
@@ -35,6 +36,7 @@ void object::get_object(int x, int y)
 
 void object::move_object()
 {
+	
 	if (x >= 500.0)
 	{
 		v.x = 2;
@@ -58,10 +60,10 @@ void object::move_object()
 	switch (v.x)
 	{
 	case 1:
-		x += 5.0;
+		x += 1.0;
 		break;
 	case 2:
-		x -= 5.0;
+		x -= 1.0;
 		break;
 	default:
 		break;
@@ -72,10 +74,10 @@ void object::move_object()
 	switch (v.y)
 	{
 	case 1:
-		y += 5.0;
+		y += 1.0;
 		break;
 	case 2:
-		y -= 5.0;
+		y -= 1.0;
 		break;
 	default:
 		break;
@@ -89,7 +91,16 @@ void object::draw()
 {
 
 	// Renderer Test
-	image->DrawSolidRect(x, y, 0.0, 8, 1.0, 1.0, 1.0, 1);
+	switch (color_num)
+	{
+	case 0:
+		image->DrawSolidRect(x, y, 0.0, 8, 1.0, 1.0, 1.0, 1);
+		break;
+	case 1:
+		image->DrawSolidRect(x, y, 0.0, 8, 1.0, 0.0, 0.0, 1);
+		break;
+	}
+	
 }
 
 void object::update()
@@ -117,10 +128,10 @@ void object::update()
 	switch (v.x)
 	{
 	case 1:
-		x += 5.0;
+		x += 1.0;
 		break;
 	case 2:
-		x -= 5.0;
+		x -= 1.0;
 		break;
 	default:
 		break;
@@ -131,10 +142,10 @@ void object::update()
 	switch (v.y)
 	{
 	case 1:
-		y += 5.0;
+		y += 1.0;
 		break;
 	case 2:
-		y -= 5.0;
+		y -= 1.0;
 		break;
 	default:
 		break;

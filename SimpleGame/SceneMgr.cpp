@@ -94,16 +94,12 @@ void SceneMgr::draw()
 			switch (mainobject[i]->set_col())
 			{
 			case 0:
-				if (mainobject[i]->set_time() < i)
-				{
+				
 					image->DrawSolidRect(mainobject[i]->set_x(), mainobject[i]->set_y(), 0, 8, 1.0f, 1.0f, 1.0f, 1);
-				}
 				break;
 			case 1:
-				if (mainobject[i]->set_time() < i)
-				{
+				
 					image->DrawSolidRect(mainobject[i]->set_x(), mainobject[i]->set_y(), 0, 8, 1.0f, 0.0f, 0.0f, 1);
-				}
 				break;
 			}
 		}

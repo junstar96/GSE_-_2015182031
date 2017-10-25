@@ -4,7 +4,7 @@
 object::object()
 {
 	time = 0;
-	life = 1000.0;
+	life = 100.0;
 	x = 400;
 	y = 300;
 	v.x = 1;
@@ -19,7 +19,7 @@ object::object(float x, float y) : x(x), y(y)
 	
 	speed = 1.0;
 	time = 0;
-	life = 1000.0;
+	life = 100.0;
 	v.x = rand() % 2 + 1;
 	v.y = rand() % 2 + 1;
 	color_num = 0;

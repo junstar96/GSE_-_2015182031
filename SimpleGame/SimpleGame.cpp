@@ -13,11 +13,6 @@ but WITHOUT ANY WARRANTY.
 #include "Dependencies\glew.h"
 #include "Dependencies\freeglut.h"
 
-#include "Renderer.h"
-
-#include "battleship_basic.h"
-#include "battleship_enemy.h"
-#include "object.h"
 #include "SceneMgr.h"
 
 SceneMgr* test = NULL;
@@ -65,11 +60,13 @@ void KeyInput(unsigned char key, int x, int y)
 	{
 	case 'a':
 	case 'A':
+		delete test;
+		exit(1);
 		break;
 
 	case 'd':
 	case 'D':
-		
+		test->del_object();
 		break;
 	case 'w':
 	case 'W':
@@ -88,7 +85,6 @@ void SpecialKeyInput(int key, int x, int y)
 void timer(int value)
 {
 	test->update();
-	test->printf_point();
 
 	glutTimerFunc(30, timer, 1);
 }
@@ -127,7 +123,7 @@ int main(int argc, char **argv)
 
 	glutMainLoop();
 
-	delete test;
+	
 
 	return 0;
 }

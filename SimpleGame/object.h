@@ -20,8 +20,10 @@ protected:
 	double x;
 	double y;
 	double speed;
+	float time;
+	float life;
 	vect v;
-	Renderer* image = NULL;
+	
 
 public:
 	object();
@@ -30,11 +32,9 @@ public:
 	
 	void move_object();
 
-	void draw();
-
 	void get_object(int x, int y);
 
-	void update();
+	void update(float get_time);
 
 	
 
@@ -57,5 +57,15 @@ public:
 	int set_col() const
 	{
 		return color_num;
+	}
+
+	float set_time() const
+	{
+		return time;
+	}
+
+	float set_life() const
+	{
+		return life;
 	}
 };

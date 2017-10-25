@@ -1,14 +1,21 @@
 #include"stdafx.h"
 #include"SceneMgr.h"
+#include<Windows.h>
+#include"Mmsystem.h"
+#pragma comment(lib, "winmm.lib")
 
+float start_time;
 
 SceneMgr::SceneMgr()
 {
+	image = new Renderer(500, 500);
 	num = 0;
 }
 
 SceneMgr::SceneMgr(int get_num) : num(get_num)
 {
+	image = new Renderer(500, 500);
+	start_time = (float)timeGetTime()*0.001f;
 	for (int i = 0; i < num; ++i)
 	{
 		mainobject[i] = new object((float)(rand()%500 - 250), (float)(rand()%500 - 250));
@@ -23,17 +30,22 @@ SceneMgr::~SceneMgr()
 		if (list[i] == true)
 		{
 			delete mainobject[i];
+			list[i] = false;
+			
 		}
 	}
+	printf("전부 삭제\n");
 }
 
 void SceneMgr::update()
 {
+	float time = timeGetTime()*0.001f;
+	printf("%f\n", time-start_time);
 	for (int i = 0; i <= num; ++i)
 	{
 		if (list[i] == true)
 		{
-			mainobject[i]->update();
+			mainobject[i]->update(time-start_time);
 			mainobject[i]->get_col(0);
 		}
 	}
@@ -57,6 +69,19 @@ void SceneMgr::update()
 				}
 			}
 		}
+
+		
+	}
+
+
+	for (int i = 0; i < num; ++i)
+	{
+		
+		if (mainobject[i]->set_life() <= 0)
+		{
+			
+			del_object(i);
+		}
 	}
 }
 
@@ -66,7 +91,21 @@ void SceneMgr::draw()
 	{
 		if (list[i] == true)
 		{
-			mainobject[i]->draw();
+			switch (mainobject[i]->set_col())
+			{
+			case 0:
+				if (mainobject[i]->set_time() < i)
+				{
+					image->DrawSolidRect(mainobject[i]->set_x(), mainobject[i]->set_y(), 0, 8, 1.0f, 1.0f, 1.0f, 1);
+				}
+				break;
+			case 1:
+				if (mainobject[i]->set_time() < i)
+				{
+					image->DrawSolidRect(mainobject[i]->set_x(), mainobject[i]->set_y(), 0, 8, 1.0f, 0.0f, 0.0f, 1);
+				}
+				break;
+			}
 		}
 	}
 }
@@ -74,6 +113,23 @@ void SceneMgr::draw()
 
 void SceneMgr::get_object(float x, float y)
 {
+	int tmp = 0;
+
+	for (int i = 0; i < num; ++i)
+	{
+		if (!list[i])
+		{
+			mainobject[i] = new object(x, y);
+			list[i] = true;
+			break;
+		}
+	}
+
+	if (tmp != num)
+	{
+		return;
+	}
+
 	if (num < max - 1)
 	{
 		num += 1;
@@ -89,6 +145,15 @@ void SceneMgr::del_object()
 		delete mainobject[num];
 		list[num] = false;
 		num -= 1;
+	}
+}
+
+void SceneMgr::del_object(int i)
+{
+	if (list[i])
+	{
+		delete mainobject[i];
+		list[i] = false;
 	}
 }
 

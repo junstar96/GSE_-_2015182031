@@ -3,21 +3,23 @@
 
 object::object()
 {
-	image = new Renderer(500, 500);
+	time = 0;
+	life = 1000.0;
 	x = 400;
 	y = 300;
 	v.x = 1;
 	v.y = 1;
+	speed = 1;
 	color_num = 0;
-	if (!image->IsInitialized())
-	{
-		std::cout << "Renderer could not be initialized.. \n";
-	}
+	
 }
 
 object::object(float x, float y) : x(x), y(y)
 {
-	image = new Renderer(500, 500);
+	
+	speed = 1.0;
+	time = 0;
+	life = 1000.0;
 	v.x = rand() % 2 + 1;
 	v.y = rand() % 2 + 1;
 	color_num = 0;
@@ -26,7 +28,7 @@ object::object(float x, float y) : x(x), y(y)
 
 object::~object()
 {
-	delete image;
+	printf("삭제당함\n");
 }
 
 void object::get_object(int x, int y)
@@ -87,71 +89,59 @@ void object::move_object()
 
 }
 
-void object::draw()
+
+
+void object::update(float get_time)
 {
+		if (x >= 250.0)
+		{
+			v.x = 2;
+		}
+		else if (x <= -250.0)
+		{
+			v.x = 1;
+		}
 
-	// Renderer Test
-	switch (color_num)
-	{
-	case 0:
-		image->DrawSolidRect(x, y, 0.0, 8, 1.0, 1.0, 1.0, 1);
-		break;
-	case 1:
-		image->DrawSolidRect(x, y, 0.0, 8, 1.0, 0.0, 0.0, 1);
-		break;
-	}
-	
-}
-
-void object::update()
-{
-	if (x >= 250.0)
-	{
-		v.x = 2;
-	}
-	else if (x <= -250.0)
-	{
-		v.x = 1;
-	}
-
-	if (y >= 250.0)
-	{
-		v.y = 2;
-	}
-	else if (y <= -250.0)
-	{
-		v.y = 1;
-	}
+		if (y >= 250.0)
+		{
+			v.y = 2;
+		}
+		else if (y <= -250.0)
+		{
+			v.y = 1;
+		}
 
 
 
-	switch (v.x)
-	{
-	case 1:
-		x += 1.0;
-		break;
-	case 2:
-		x -= 1.0;
-		break;
-	default:
-		break;
-	}
+		switch (v.x)
+		{
+		case 1:
+			x += 1.0*speed;
+			break;
+		case 2:
+			x -= 1.0*speed;
+			break;
+		default:
+			break;
+		}
 
 
 
-	switch (v.y)
-	{
-	case 1:
-		y += 1.0;
-		break;
-	case 2:
-		y -= 1.0;
-		break;
-	default:
-		break;
-	}
+		switch (v.y)
+		{
+		case 1:
+			y += 1.0*speed;
+			break;
+		case 2:
+			y -= 1.0*speed;
+			break;
+		default:
+			break;
+		}
 
-
+		time = get_time;
+		speed = 1.0 * (1.0+time);
+		life -= 1;
 }
 
 void object::printf_point()

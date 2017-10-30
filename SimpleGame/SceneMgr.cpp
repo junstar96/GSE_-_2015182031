@@ -25,7 +25,7 @@ SceneMgr::SceneMgr(int get_num) : num(get_num)
 
 SceneMgr::~SceneMgr()
 {
-	for (int i = 0; i <= num; ++i)
+	for (int i = 0; i < num; ++i)
 	{
 		if (list[i] == true)
 		{
@@ -41,7 +41,7 @@ void SceneMgr::update()
 {
 	float time = timeGetTime()*0.001f;
 	printf("%f\n", time-start_time);
-	for (int i = 0; i <= num; ++i)
+	for (int i = 0; i < num; ++i)
 	{
 		if (list[i] == true)
 		{
@@ -50,12 +50,12 @@ void SceneMgr::update()
 		}
 	}
 
-	for (int i = 0; i <= num; ++i)
+	for (int i = 0; i < num; ++i)
 	{
 
 		if (list[i] == true)
 		{
-			for (int j = i + 1; j <= num; ++j)
+			for (int j = i + 1; j < num; ++j)
 			{
 				if (list[j] == true)
 				{
@@ -87,7 +87,7 @@ void SceneMgr::update()
 
 void SceneMgr::draw()
 {
-	for (int i = 0; i <= num; ++i)
+	for (int i = 0; i < num; ++i)
 	{
 		if (list[i] == true)
 		{
@@ -119,18 +119,22 @@ void SceneMgr::get_object(float x, float y)
 			list[i] = true;
 			break;
 		}
+		else
+		{
+			tmp += 1;
+		}
 	}
 
 	if (tmp != num)
 	{
 		return;
 	}
-
-	if (num < max - 1)
+	else if (tmp == num && num < max - 1)
 	{
-		num += 1;
+		
 		mainobject[num] = new object(x, y);
 		list[num] = true;
+		num += 1;
 	}
 }
 

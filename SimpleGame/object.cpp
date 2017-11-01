@@ -7,22 +7,36 @@ object::object()
 	life = 100.0;
 	x = 400;
 	y = 300;
-	v.x = 1;
-	v.y = 1;
+	v.x = cos((float)(rand()%361 - 180)*0.01f);
+	v.y = sin((float)(rand()%361 - 180)*0.01f);
 	speed = 1;
 	color_num = 0;
 	
 }
 
-object::object(float x, float y) : x(x), y(y)
+object::object(float x, float y, int type) : x(x), y(y)
 {
 	
 	speed = 1.0;
 	time = 0;
-	life = 100.0;
-	v.x = rand() % 2 + 1;
-	v.y = rand() % 2 + 1;
+	v.x = cos((float)(rand() % 361 - 180)*0.01f);
+	v.y = sin((float)(rand() % 361 - 180)*0.01f);
 	color_num = 0;
+	switch (type)
+	{
+	case 1:
+		life = 100;
+		break;
+	case 2:
+		life = 500;
+		break;
+	case 3:
+		life = 20;
+		break;
+	case 4:
+		life = 40;
+		break;
+	}
 }
 
 
@@ -59,31 +73,7 @@ void object::move_object()
 
 
 
-	switch (v.x)
-	{
-	case 1:
-		x += 1.0;
-		break;
-	case 2:
-		x -= 1.0;
-		break;
-	default:
-		break;
-	}
-
 	
-
-	switch (v.y)
-	{
-	case 1:
-		y += 1.0;
-		break;
-	case 2:
-		y -= 1.0;
-		break;
-	default:
-		break;
-	}
 
 	
 
@@ -91,71 +81,86 @@ void object::move_object()
 
 
 
-void object::update(float get_time)
+void object::update(float get_time, int type)
 {
+	switch (type)
+	{
+	case 1:
+
 		if (x >= 250.0)
 		{
-			v.x = 2;
+			v.x = v.x * (-1);
 		}
 		else if (x <= -250.0)
 		{
-			v.x = 1;
+			v.x = v.x * (-1);
 		}
 
 		if (y >= 250.0)
 		{
-			v.y = 2;
+			v.y = v.y *(-1);
 		}
 		else if (y <= -250.0)
 		{
-			v.y = 1;
+			v.y = v.y *(-1);
 		}
 
 
 
-		switch (v.x)
-		{
-		case 1:
-			x += 1.0*speed;
-			break;
-		case 2:
-			x -= 1.0*speed;
-			break;
-		default:
-			break;
-		}
-
-
-
-		switch (v.y)
-		{
-		case 1:
-			y += 1.0*speed;
-			break;
-		case 2:
-			y -= 1.0*speed;
-			break;
-		default:
-			break;
-		}
+		x = x  + speed * v.x;
+		y = y + speed * v.y;
 
 		time = get_time;
-		speed = 1.0 * (1.0+time);
-		life -= 1;
+		speed = 1.0 * (1.0 + time);
+		//life -= 1; , 이거 그 때 라이프타임
+		break;
+	case 2:
+		break;
+	case 3:
+		
+		if (x >= 250.0)
+		{
+			life = 0;
+		}
+		else if (x <= -250.0)
+		{
+			life = 0;
+		}
+
+		if (y >= 250.0)
+		{
+			life = 0;
+		}
+		else if (y <= -250.0)
+		{
+			life = 0;
+		}
+
+
+
+	
+
+		x = x + speed * v.x;
+		y = y + speed * v.y;
+
+		speed = 20;
+		break;
+	case 4:
+		break;
+	}
 }
 
 void object::printf_point()
 {
-	printf("%lf %lf, vec = %d %d\n", x, y, v.x, v.y);
 	
 }
 
-void const object::get_vec_x(int vec)
+void const object::get_vec_x(float vec)
 {
 	v.x = vec;
 }
 
-void const object::get_vec_y(int vec)
+void const object::get_vec_y(float vec)
 {
 	v.y = vec;
 }
@@ -170,12 +175,12 @@ double object::set_y() const
 	return y;
 }
 
-int object::set_vec_x() const
+float object::set_vec_x() const
 {
 	return v.x;
 }
 
-int object::set_vec_y() const
+float object::set_vec_y() const
 {
 	return v.y;
 }

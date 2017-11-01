@@ -23,7 +23,7 @@ void RenderScene(void)
 	//// Renderer Test
 	//g_Renderer->DrawSolidRect(0, 0, 0, 4, 1, 0, 1, 1);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	glClearColor(0.0f, 0.3f, 0.3f, 1.0f);
+	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
 	test->draw();
 	
@@ -47,7 +47,7 @@ void MouseInput(int button, int state, int x, int y)
 	case GLUT_LEFT_BUTTON:
 		if (state == GLUT_UP)
 		{
-			test->get_object(x - 250.0, 250.0 - y);
+			test->get_object((double)(x - 250.0), (double)(250.0 - y), 1);
 		}
 		break;
 	}
@@ -110,7 +110,7 @@ int main(int argc, char **argv)
 		std::cout << "GLEW 3.0 not supported\n ";
 	}
 
-	test = new SceneMgr(50);
+	test = new SceneMgr();
 	// Initialize Renderer
 	
 

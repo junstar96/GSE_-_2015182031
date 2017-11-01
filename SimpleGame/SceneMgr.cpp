@@ -9,17 +9,27 @@ float start_time;
 SceneMgr::SceneMgr()
 {
 	image = new Renderer(500, 500);
-	num = 0;
+	start_time = (float)timeGetTime()*0.001f;
+
+	type[0] = object_building;
+	mainobject[0] = new object(0, 0, type[0]);
+	list[0] = true;
+	num = 1;
 }
 
 SceneMgr::SceneMgr(int get_num) : num(get_num)
 {
 	image = new Renderer(500, 500);
 	start_time = (float)timeGetTime()*0.001f;
-	for (int i = 0; i < num; ++i)
+	type[0] = object_building;
+	mainobject[0] = new object(0, 0, type[0]);
+	
+	for (int i = 1; i < num; ++i)
 	{
-		mainobject[i] = new object((float)(rand()%500 - 250), (float)(rand()%500 - 250));
+		type[i] = object_character;
+		mainobject[i] = new object((float)(rand()%500 - 250), (float)(rand()%500 - 250), type[i]);
 		list[i] = true;
+		
 	}
 }
 
@@ -40,12 +50,20 @@ SceneMgr::~SceneMgr()
 void SceneMgr::update()
 {
 	float time = timeGetTime()*0.001f;
-	printf("%f\n", time-start_time);
+	float bullet_flag = time - start_time;
+
+	printf("%f\n", cos(bullet_flag));
+
+	if (bullet_flag >= 0.5)
+	{
+		get_object(0, 0, object_bullet);
+	}
+
 	for (int i = 0; i < num; ++i)
 	{
 		if (list[i] == true)
 		{
-			mainobject[i]->update(time-start_time);
+			mainobject[i]->update(time-start_time, type[i]);
 			mainobject[i]->get_col(0);
 		}
 	}
@@ -91,23 +109,27 @@ void SceneMgr::draw()
 	{
 		if (list[i] == true)
 		{
-			switch (mainobject[i]->set_col())
+			switch (type[i])
 			{
-			case 0:
-				
-					image->DrawSolidRect(mainobject[i]->set_x(), mainobject[i]->set_y(), 0, 8, 1.0f, 1.0f, 1.0f, 1);
+			case object_character:
+				image->DrawSolidRect((float)mainobject[i]->set_x(), (float)mainobject[i]->set_y(), 0, 8, 1.0f, 1.0f, 1.0f, 1);
 				break;
-			case 1:
-				
-					image->DrawSolidRect(mainobject[i]->set_x(), mainobject[i]->set_y(), 0, 8, 1.0f, 0.0f, 0.0f, 1);
+			case object_building:
+				image->DrawSolidRect((float)mainobject[i]->set_x(), (float)mainobject[i]->set_y(), 0, 50, 1.0f, 1.0f, 0.0f, 1);
+				break;
+			case object_bullet:
+				image->DrawSolidRect((float)mainobject[i]->set_x(), (float)mainobject[i]->set_y(), 0, 2, 1.0f, 0.0f, 0.0f, 1);
+				break;
+			case object_arrow:
 				break;
 			}
+			
 		}
 	}
 }
 
 
-void SceneMgr::get_object(float x, float y)
+void SceneMgr::get_object(float x, float y, int get_type)
 {
 	int tmp = 0;
 
@@ -115,8 +137,10 @@ void SceneMgr::get_object(float x, float y)
 	{
 		if (!list[i])
 		{
-			mainobject[i] = new object(x, y);
+			type[i] = get_type;
+			mainobject[i] = new object(x, y, type[i]);
 			list[i] = true;
+			
 			break;
 		}
 		else
@@ -131,9 +155,10 @@ void SceneMgr::get_object(float x, float y)
 	}
 	else if (tmp == num && num < max - 1)
 	{
-		
-		mainobject[num] = new object(x, y);
+		type[num] = get_type;
+		mainobject[num] = new object(x, y, type[num]);
 		list[num] = true;
+	
 		num += 1;
 	}
 }
@@ -174,14 +199,45 @@ void SceneMgr::cul_object(int i, int j)
 	double jx = mainobject[j]->set_x();
 	double jy = mainobject[j]->set_y();
 
-	if (-8 < ix - jx && ix - jx < 8)
+	switch (type[i])
 	{
-		if (-8 < iy - jy && iy - jy < 8)
+	case object_character:
+		switch (type[j])
 		{
-			mainobject[i]->get_col(1);
-			mainobject[j]->get_col(1);
+		case object_character:
+			if (-4 < ix - jx && ix - jx < 4)
+			{
+				if (-4 < iy - jy && iy - jy < 4)
+				{
+					mainobject[i]->get_col(1);
+					mainobject[j]->get_col(1);
+				}
+			}
+			break;
+		case object_building:
+			break;
+			
 		}
+		break;
+	case object_building:
+		switch (type[j])
+		{
+		case object_character:
+			if (-25 < ix - jx && ix - jx < 25)
+			{
+				if (-25 < iy - jy && iy - jy < 25)
+				{
+					mainobject[i]->minus_life(mainobject[j]->set_life());
+					mainobject[j]->minus_life(mainobject[j]->set_life());
+				}
+			}
+			break;
+		case object_building:
+			break;
+		}
+		break;
 	}
+	
 	
 }
 
@@ -265,3 +321,4 @@ void SceneMgr::crash_object(int i, int j)
 		break;
 	}
 }
+

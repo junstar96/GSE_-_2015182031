@@ -19,8 +19,8 @@ object::object(float x, float y, int type) : x(x), y(y)
 	
 	speed = 1.0;
 	time = 0;
-	v.x = cos((float)(rand() % 361 - 180)*0.01f);
-	v.y = sin((float)(rand() % 361 - 180)*0.01f);
+	v.x = cos((float)(rand())*0.01f);
+	v.y = sin((float)(rand())*0.01f);
 	color_num = 0;
 	switch (type)
 	{

@@ -205,16 +205,18 @@ void SceneMgr::cul_object(int i, int j)
 		switch (type[j])
 		{
 		case object_character:
-			if (-4 < ix - jx && ix - jx < 4)
-			{
-				if (-4 < iy - jy && iy - jy < 4)
-				{
-					mainobject[i]->get_col(1);
-					mainobject[j]->get_col(1);
-				}
-			}
 			break;
 		case object_building:
+			break;
+		case object_bullet:
+			if (-8 < ix - jx && ix - jx < 8)
+			{
+				if (-8 < iy - jy && iy - jy < 8)
+				{
+					mainobject[i]->minus_life(mainobject[j]->set_life());
+					mainobject[j]->minus_life(mainobject[j]->set_life());
+				}
+			}
 			break;
 			
 		}
@@ -233,6 +235,16 @@ void SceneMgr::cul_object(int i, int j)
 			}
 			break;
 		case object_building:
+			break;
+		}
+	case object_bullet:
+		switch (type[j])
+		{
+		case object_character:
+			break;
+		case object_building:
+			break;
+		case object_bullet:
 			break;
 		}
 		break;

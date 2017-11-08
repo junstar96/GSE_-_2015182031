@@ -26,7 +26,7 @@ protected:
 
 public:
 	object();
-	object(float x, float y, int type);
+	object(double x, double y, int type);
 	~object();
 	
 	void move_object();

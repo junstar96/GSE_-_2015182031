@@ -14,7 +14,7 @@ object::object()
 	
 }
 
-object::object(float x, float y, int type) : x(x), y(y)
+object::object(double x, double y, int type) : x(x), y(y)
 {
 	
 	speed = 1.0;
@@ -34,7 +34,7 @@ object::object(float x, float y, int type) : x(x), y(y)
 		life = 20;
 		break;
 	case 4:
-		life = 40;
+		life = 10;
 		break;
 	}
 }
@@ -111,7 +111,7 @@ void object::update(float get_time, int type)
 		y = y + speed * v.y;
 
 		time = get_time;
-		speed = 1.0 * (1.0 + time);
+		speed = 5;
 		//life -= 1; , 이거 그 때 라이프타임
 		break;
 	case 2:
@@ -143,9 +143,38 @@ void object::update(float get_time, int type)
 		x = x + speed * v.x;
 		y = y + speed * v.y;
 
-		speed = 20;
+		speed = 10;
 		break;
 	case 4:
+
+		if (x >= 250.0)
+		{
+			v.x = v.x * (-1);
+		}
+		else if (x <= -250.0)
+		{
+			v.x = v.x * (-1);
+		}
+
+		if (y >= 250.0)
+		{
+			v.y = v.y *(-1);
+		}
+		else if (y <= -250.0)
+		{
+			v.y = v.y *(-1);
+		}
+
+		
+
+
+
+
+
+		x = x + speed * v.x;
+		y = y + speed * v.y;
+
+		speed = 10;
 		break;
 	}
 }

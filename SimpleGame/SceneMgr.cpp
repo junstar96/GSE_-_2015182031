@@ -8,9 +8,9 @@ float start_time;
 
 SceneMgr::SceneMgr()
 {
-	image = new Renderer(500, 500);
+	Cimage = new Renderer(500, 500);
 	start_time = (float)timeGetTime()*0.001f;
-
+	m_Block_ID = Cimage->CreatePngTexture("./resource/perfect_first.PNG");
 	type[0] = object_building;
 	mainobject[0] = new object(0, 0, type[0]);
 	list[0] = true;
@@ -19,11 +19,12 @@ SceneMgr::SceneMgr()
 
 SceneMgr::SceneMgr(int get_num) : num(get_num)
 {
-	image = new Renderer(500, 500);
+	Cimage = new Renderer(500, 500);
 	start_time = (float)timeGetTime()*0.001f;
 	type[0] = object_building;
 	mainobject[0] = new object(0, 0, type[0]);
-	
+	m_Block_ID = Cimage->CreatePngTexture("./resource/perfect_first.PNG");
+
 	for (int i = 1; i < num; ++i)
 	{
 		type[i] = object_character;
@@ -51,12 +52,36 @@ void SceneMgr::update()
 {
 	float time = timeGetTime()*0.001f;
 	float bullet_flag = time - start_time;
+	static float time_cut = 0;
 
-	printf("%f\n", cos(bullet_flag));
+	printf("%f\n", bullet_flag - (float)time_cut);
+	
 
-	if (bullet_flag >= 0.5)
+	for (int i = 0; i < num; ++i)
 	{
-		get_object(0, 0, object_bullet);
+		if (list[i])
+		{
+			switch (type[i])
+			{
+			case object_character:
+				if (bullet_flag - time_cut >= 0.5)
+				{
+					get_object(mainobject[i]->set_x() + 4.0, mainobject[i]->set_y()+ 4.0, object_arrow);
+				}
+				break;
+			case object_building:
+				if (bullet_flag - time_cut>= 0.5)
+				{
+					get_object(mainobject[i]->set_x(), mainobject[i]->set_y(), object_bullet);
+				}
+				break;
+			}
+		}
+	}
+	
+	if (bullet_flag - time_cut>= 0.5)
+	{
+		time_cut += 0.5;
 	}
 
 	for (int i = 0; i < num; ++i)
@@ -75,7 +100,7 @@ void SceneMgr::update()
 		{
 			for (int j = i + 1; j < num; ++j)
 			{
-				if (list[j] == true)
+				if (list[i] == true&&list[j] == true)
 				{
 					cul_object(i, j);
 					
@@ -92,15 +117,7 @@ void SceneMgr::update()
 	}
 
 
-	for (int i = 0; i < num; ++i)
-	{
-		
-		if (mainobject[i]->set_life() <= 0)
-		{
-			
-			del_object(i);
-		}
-	}
+	
 }
 
 void SceneMgr::draw()
@@ -112,15 +129,17 @@ void SceneMgr::draw()
 			switch (type[i])
 			{
 			case object_character:
-				image->DrawSolidRect((float)mainobject[i]->set_x(), (float)mainobject[i]->set_y(), 0, 8, 1.0f, 1.0f, 1.0f, 1);
+				Cimage->DrawSolidRect((float)mainobject[i]->set_x(), (float)mainobject[i]->set_y(), 0, 8, 1.0f, 1.0f, 1.0f, 1);
 				break;
 			case object_building:
-				image->DrawSolidRect((float)mainobject[i]->set_x(), (float)mainobject[i]->set_y(), 0, 50, 1.0f, 1.0f, 0.0f, 1);
+				Cimage->DrawTexturedRect((float)mainobject[i]->set_x(), (float)mainobject[i]->set_y(), 0, 80, 0.0f, 1.0f, 0.0f, 0, 
+					m_Block_ID);
 				break;
 			case object_bullet:
-				image->DrawSolidRect((float)mainobject[i]->set_x(), (float)mainobject[i]->set_y(), 0, 2, 1.0f, 0.0f, 0.0f, 1);
+				Cimage->DrawSolidRect((float)mainobject[i]->set_x(), (float)mainobject[i]->set_y(), 0, 2, 1.0f, 0.0f, 0.0f, 1);
 				break;
 			case object_arrow:
+				Cimage->DrawSolidRect((float)mainobject[i]->set_x(), (float)mainobject[i]->set_y(), 0, 2, 0.0f, 1.0f, 0.0f, 1);
 				break;
 			}
 			
@@ -209,6 +228,7 @@ void SceneMgr::cul_object(int i, int j)
 		case object_building:
 			break;
 		case object_bullet:
+		case object_arrow:
 			if (-8 < ix - jx && ix - jx < 8)
 			{
 				if (-8 < iy - jy && iy - jy < 8)
@@ -218,10 +238,37 @@ void SceneMgr::cul_object(int i, int j)
 				}
 			}
 			break;
-			
 		}
 		break;
 	case object_building:
+		switch (type[j])
+		{
+		case object_character:
+			if (-40 < ix - jx && ix - jx < 40)
+			{
+				if (-40 < iy - jy && iy - jy < 40)
+				{
+					mainobject[i]->minus_life(mainobject[j]->set_life());
+					mainobject[j]->minus_life(mainobject[j]->set_life());
+				}
+			}
+			break;
+		case object_building:
+			break;
+		case object_bullet:
+			break;
+		case object_arrow:
+			if (-40 < ix - jx && ix - jx < 40)
+			{
+				if (-40 < iy - jy && iy - jy < 40)
+				{
+					mainobject[i]->minus_life(mainobject[j]->set_life());
+					mainobject[j]->minus_life(mainobject[j]->set_life());
+				}
+			}
+			break;
+		}
+	case object_bullet:
 		switch (type[j])
 		{
 		case object_character:
@@ -236,101 +283,50 @@ void SceneMgr::cul_object(int i, int j)
 			break;
 		case object_building:
 			break;
+		case object_bullet:
+			break;
+		case object_arrow:
+			break;
 		}
-	case object_bullet:
+		break;
+	case object_arrow:
 		switch (type[j])
 		{
 		case object_character:
+			if (-25 < ix - jx && ix - jx < 25)
+			{
+				if (-25 < iy - jy && iy - jy < 25)
+				{
+					mainobject[i]->minus_life(mainobject[j]->set_life());
+					mainobject[j]->minus_life(mainobject[j]->set_life());
+				}
+			}
 			break;
 		case object_building:
+			if (-25 < ix - jx && ix - jx < 25)
+			{
+				if (-25 < iy - jy && iy - jy < 25)
+				{
+					mainobject[i]->minus_life(mainobject[j]->set_life());
+					mainobject[j]->minus_life(mainobject[j]->set_life());
+				}
+			}
 			break;
 		case object_bullet:
 			break;
+		case object_arrow:
+			break;
 		}
 		break;
 	}
 	
 	
+	if (mainobject[i]->set_life() <= 0)
+		del_object(i);
+
+	if (mainobject[j]->set_life() <= 0)
+		del_object(j);
+	
 }
 
-void SceneMgr::crash_object(int i, int j)
-{
-	int vxi = mainobject[i]->set_vec_x();
-	int vxj = mainobject[j]->set_vec_x();
-	int vyi = mainobject[i]->set_vec_y();
-	int vyj = mainobject[j]->set_vec_y();
-
-	double ix = mainobject[i]->set_x();
-	double iy = mainobject[i]->set_y();
-	double jx = mainobject[j]->set_x();
-	double jy = mainobject[j]->set_y();
-
-	switch (vxi)
-	{
-	case 1:
-		if (vxj == 2)
-		{
-			if (ix <= jx - 2.0 && jx <= ix + 4.0)
-			{
-				if (jy - 4.0 <= iy && iy <= jy + 4.0)
-				{
-					mainobject[i]->get_vec_x(2);
-					mainobject[j]->get_vec_x(1);
-
-					printf("x 값 %d %d 충돌 \n", i, j);
-				}
-			}
-		}
-		break;
-	case 2:
-		if (vxj == 1)
-		{
-			if (jx <= ix - 2.0 && ix < jx + 4.0)
-			{
-				if (jy - 4.0 <= iy && iy <= jy + 4.0)
-				{
-					mainobject[i]->get_vec_x(1);
-					mainobject[j]->get_vec_x(2);
-
-					printf("x값 %d %d 충돌 \n", i, j);
-				}
-			}
-		}
-		break;
-	}
-
-	switch (vyi)
-	{
-	case 1:
-		if (vyj == 2)
-		{
-			if (iy <= jy && jy <= iy + 10.0)
-			{
-				if (jx - 4.0 <= ix && ix <= jx + 4.0)
-				{
-					mainobject[i]->get_vec_y(2);
-					mainobject[j]->get_vec_y(1);
-
-					printf("y값 %d %d 충돌 \n", i, j);
-				}
-			}
-		}
-		break;
-	case 2:
-		if (vyj == 1)
-		{
-			if (jy <= iy && iy < jy + 10.0)
-			{
-				if (jx - 4.0 <= ix && ix <= jx + 4.0)
-				{
-					mainobject[i]->get_vec_y(1);
-					mainobject[j]->get_vec_y(2);
-
-					printf("y값 %d %d 충돌 \n", i, j);
-				}
-			}
-		}
-		break;
-	}
-}
 

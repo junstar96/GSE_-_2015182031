@@ -14,7 +14,7 @@ object::object()
 	
 }
 
-object::object(double x, double y, int type) : x(x), y(y)
+object::object(double x, double y, int type, int get_team) : x(x), y(y), Iteam(get_team)
 {
 	
 	speed = 1.0;
@@ -37,6 +37,8 @@ object::object(double x, double y, int type) : x(x), y(y)
 		life = 10;
 		break;
 	}
+
+	
 }
 
 
@@ -50,36 +52,6 @@ void object::get_object(int x, int y)
 
 }
 
-void object::move_object()
-{
-	
-	if (x >= 500.0)
-	{
-		v.x = 2;
-	}
-	else if (x <= -500.0)
-	{
-		v.x = 1;
-	}
-
-	if (y >= 500.0)
-	{
-		v.y = 2;
-	}
-	else if (y <= -500.0)
-	{
-		v.y = 1;
-	}
-
-
-
-	
-
-	
-
-}
-
-
 
 void object::update(float get_time, int type)
 {
@@ -87,20 +59,20 @@ void object::update(float get_time, int type)
 	{
 	case 1:
 
-		if (x >= 250.0)
+		if (x >= x_size/2)
 		{
 			v.x = v.x * (-1);
 		}
-		else if (x <= -250.0)
+		else if (x <= -(x_size)/2)
 		{
 			v.x = v.x * (-1);
 		}
 
-		if (y >= 250.0)
+		if (y >= y_size/2)
 		{
 			v.y = v.y *(-1);
 		}
-		else if (y <= -250.0)
+		else if (y <= -(y_size/2))
 		{
 			v.y = v.y *(-1);
 		}
@@ -118,20 +90,20 @@ void object::update(float get_time, int type)
 		break;
 	case 3:
 		
-		if (x >= 250.0)
+		if (x >= x_size/2)
 		{
 			life = 0;
 		}
-		else if (x <= -250.0)
+		else if (x <= -(x_size/2))
 		{
 			life = 0;
 		}
 
-		if (y >= 250.0)
+		if (y >= y_size/2)
 		{
 			life = 0;
 		}
-		else if (y <= -250.0)
+		else if (y <= -(y_size/2))
 		{
 			life = 0;
 		}
@@ -147,20 +119,20 @@ void object::update(float get_time, int type)
 		break;
 	case 4:
 
-		if (x >= 250.0)
+		if (x >= x_size/2)
 		{
 			v.x = v.x * (-1);
 		}
-		else if (x <= -250.0)
+		else if (x <= -(x_size/2))
 		{
 			v.x = v.x * (-1);
 		}
 
-		if (y >= 250.0)
+		if (y >= y_size/2)
 		{
 			v.y = v.y *(-1);
 		}
-		else if (y <= -250.0)
+		else if (y <= -(y_size/2))
 		{
 			v.y = v.y *(-1);
 		}

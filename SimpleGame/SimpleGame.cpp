@@ -47,7 +47,7 @@ void MouseInput(int button, int state, int x, int y)
 	case GLUT_LEFT_BUTTON:
 		if (state == GLUT_UP)
 		{
-			test->get_object((double)(x - 250.0), (double)(250.0 - y), 1);
+			//test->get_object((double)(x - x_size/2), (double)(y_size/2 - y), 1);
 		}
 		break;
 	}
@@ -97,7 +97,7 @@ int main(int argc, char **argv)
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_DEPTH | GLUT_DOUBLE | GLUT_RGBA);
 	glutInitWindowPosition(0, 0);
-	glutInitWindowSize(500, 500);
+	glutInitWindowSize(x_size, y_size);
 	glutCreateWindow("Game Software Engineering KPU");
 
 	glewInit();

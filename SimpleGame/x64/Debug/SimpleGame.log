@@ -1,4 +1,1 @@
-﻿  SceneMgr.cpp
-c:\users\이준성\desktop\구루구루 이미지 폴더\프로그램 파일 관리\game_software\gse_2_2015182031\simplegame\scenemgr.cpp(69): warning C4244: '인수': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-c:\users\이준성\desktop\구루구루 이미지 폴더\프로그램 파일 관리\game_software\gse_2_2015182031\simplegame\scenemgr.cpp(75): warning C4244: '인수': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-  SimpleGame.vcxproj -> C:\Users\이준성\Desktop\구루구루 이미지 폴더\프로그램 파일 관리\game_software\GSE_2_2015182031\x64\Debug\SimpleGame.exe
+﻿  SimpleGame.vcxproj -> C:\Users\이준성\Desktop\구루구루 이미지 폴더\프로그램 파일 관리\game_software\GSE_2_2015182031\x64\Debug\SimpleGame.exe

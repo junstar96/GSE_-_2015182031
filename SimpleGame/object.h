@@ -5,6 +5,8 @@
 #include "Dependencies\freeglut.h"
 #define py 3.14159265
 
+#define team_nt 1
+#define team_ws 2
 
 struct vect  // 1은 y = 위쪽, x = 오른쪽, 2는 y = 아래쪽, x = 왼쪽
 {
@@ -21,15 +23,15 @@ protected:
 	double speed;
 	float time;
 	int life;
+	int Iteam;//팀을 구분하기 위한 변수
 	vect v;
 	
 
 public:
 	object();
-	object(double x, double y, int type);
+	object(double x, double y, int type, int get_team);
 	~object();
 	
-	void move_object();
 
 	void get_object(int x, int y);
 
@@ -71,5 +73,10 @@ public:
 	void minus_life(const int a_life)
 	{
 		life -= a_life;
+	}
+
+	int set_Iteam() const
+	{
+		return Iteam;
 	}
 };

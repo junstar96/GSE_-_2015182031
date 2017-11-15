@@ -17,13 +17,12 @@ private:
 	int num;
 	object* mainobject[max];
 	Renderer* Cimage = NULL;
-	GLuint m_Block_ID;
+	GLuint m_Block_ID[2];
 public:
 	SceneMgr();
-	SceneMgr(int num);
 	~SceneMgr();
 
-	void get_object(float x, float y, int type);
+	void get_object(float x, float y, int type, int Iteam);
 	void del_object();
 	void del_object(int i);
 

@@ -8,30 +8,44 @@ float start_time;
 
 SceneMgr::SceneMgr()
 {
-	Cimage = new Renderer(500, 500);
+	Cimage = new Renderer(x_size, y_size);
 	start_time = (float)timeGetTime()*0.001f;
-	m_Block_ID = Cimage->CreatePngTexture("./resource/perfect_first.PNG");
-	type[0] = object_building;
-	mainobject[0] = new object(0, 0, type[0]);
-	list[0] = true;
-	num = 1;
-}
-
-SceneMgr::SceneMgr(int get_num) : num(get_num)
-{
-	Cimage = new Renderer(500, 500);
-	start_time = (float)timeGetTime()*0.001f;
-	type[0] = object_building;
-	mainobject[0] = new object(0, 0, type[0]);
-	m_Block_ID = Cimage->CreatePngTexture("./resource/perfect_first.PNG");
-
-	for (int i = 1; i < num; ++i)
+	m_Block_ID[0] = Cimage->CreatePngTexture("./resource/perfect_first.PNG");
+	m_Block_ID[1] = Cimage->CreatePngTexture("./resource/runrun.PNG");
+	for (int i = 0; i < 3; ++i)
 	{
-		type[i] = object_character;
-		mainobject[i] = new object((float)(rand()%500 - 250), (float)(rand()%500 - 250), type[i]);
-		list[i] = true;
+		type[2*i] = object_building;
+		switch (i)
+		{
+		case 0:
+			mainobject[2 * i] = new object(0, y_size/3, type[2*i], 1);
+			break;
+		case 1:
+			mainobject[2 * i] = new object(-(x_size/3), y_size / 4, type[2*i], 1);
+			break;
+		case 2:
+			mainobject[2 * i] = new object(x_size / 3, y_size / 4, type[2*i], 1);
+			break;
+		}
 		
+		list[2*i] = true;
+
+		type[2 * i + 1] = object_building;
+		switch (i)
+		{
+		case 0:
+			mainobject[2 * i + 1] = new object(0, -y_size / 3, type[2*i+1], 2);
+			break;
+		case 1:
+			mainobject[2 * i + 1] = new object(-(x_size / 3), -(y_size / 4), type[2*i + 1], 2);
+			break;
+		case 2:
+			mainobject[2 * i + 1] = new object((x_size / 3), -(y_size / 4), type[2*i + 1], 2);
+			break;
+		}
+		list[2 * i + 1] = true;
 	}
+	num = 6;
 }
 
 SceneMgr::~SceneMgr()
@@ -45,6 +59,7 @@ SceneMgr::~SceneMgr()
 			
 		}
 	}
+	delete Cimage;
 	printf("전부 삭제\n");
 }
 
@@ -55,7 +70,7 @@ void SceneMgr::update()
 	static float time_cut = 0;
 
 	printf("%f\n", bullet_flag - (float)time_cut);
-	
+	printf("%d\n", mainobject[0]->set_Iteam());
 
 	for (int i = 0; i < num; ++i)
 	{
@@ -64,24 +79,30 @@ void SceneMgr::update()
 			switch (type[i])
 			{
 			case object_character:
-				if (bullet_flag - time_cut >= 0.5)
+				if (bullet_flag - time_cut >= 1)
 				{
-					get_object(mainobject[i]->set_x() + 4.0, mainobject[i]->set_y()+ 4.0, object_arrow);
+					get_object(mainobject[i]->set_x() + 4.0, mainobject[i]->set_y()+ 4.0, object_arrow, 1);
 				}
 				break;
 			case object_building:
-				if (bullet_flag - time_cut>= 0.5)
+				if (bullet_flag - time_cut>= 1)
 				{
-					get_object(mainobject[i]->set_x(), mainobject[i]->set_y(), object_bullet);
+					get_object(mainobject[i]->set_x(), mainobject[i]->set_y(), object_bullet, mainobject[i]->set_Iteam());	
 				}
 				break;
 			}
+			
 		}
 	}
+
+	if (bullet_flag - time_cut >= 1)
+			{
+				get_object(double(rand() % 500 - 250), double(rand() % 500), object_character, 1);
+			}
 	
-	if (bullet_flag - time_cut>= 0.5)
+	if (bullet_flag - time_cut>= 1)
 	{
-		time_cut += 0.5;
+		time_cut += 1;
 	}
 
 	for (int i = 0; i < num; ++i)
@@ -129,17 +150,51 @@ void SceneMgr::draw()
 			switch (type[i])
 			{
 			case object_character:
-				Cimage->DrawSolidRect((float)mainobject[i]->set_x(), (float)mainobject[i]->set_y(), 0, 8, 1.0f, 1.0f, 1.0f, 1);
+				switch (mainobject[i]->set_Iteam())
+				{
+				case 1:
+					Cimage->DrawSolidRect((float)mainobject[i]->set_x(), (float)mainobject[i]->set_y(), 0, 8, 1.0f, 0.0f, 0.0f, 1);
+					break;
+				case 2:
+					Cimage->DrawSolidRect((float)mainobject[i]->set_x(), (float)mainobject[i]->set_y(), 0, 8, 0.0f, 0.0f, 1.0f, 1);
+					break;
+				}
 				break;
 			case object_building:
-				Cimage->DrawTexturedRect((float)mainobject[i]->set_x(), (float)mainobject[i]->set_y(), 0, 80, 0.0f, 1.0f, 0.0f, 0, 
-					m_Block_ID);
+				switch (mainobject[i]->set_Iteam())
+				{
+				case 1:
+					Cimage->DrawTexturedRect((float)mainobject[i]->set_x(), (float)mainobject[i]->set_y(), 0, 80, 0.0f, 1.0f, 0.0f, 0,
+						m_Block_ID[0]);
+					break;
+				case 2:
+					Cimage->DrawTexturedRect((float)mainobject[i]->set_x(), (float)mainobject[i]->set_y(), 0, 80, 0.0f, 1.0f, 0.0f, 0,
+						m_Block_ID[1]);
+					break;
+				}
+				
 				break;
 			case object_bullet:
-				Cimage->DrawSolidRect((float)mainobject[i]->set_x(), (float)mainobject[i]->set_y(), 0, 2, 1.0f, 0.0f, 0.0f, 1);
+				switch (mainobject[i]->set_Iteam())
+				{
+				case 1:
+					Cimage->DrawSolidRect((float)mainobject[i]->set_x(), (float)mainobject[i]->set_y(), 0, 2, 1.0f, 0.0f, 0.0f, 1);
+					break;
+				case 2:
+					Cimage->DrawSolidRect((float)mainobject[i]->set_x(), (float)mainobject[i]->set_y(), 0, 2, 0.0f, 0.0f, 1.0f, 1);
+					break;
+				}
 				break;
 			case object_arrow:
-				Cimage->DrawSolidRect((float)mainobject[i]->set_x(), (float)mainobject[i]->set_y(), 0, 2, 0.0f, 1.0f, 0.0f, 1);
+				switch (mainobject[i]->set_Iteam())
+				{
+				case 1:
+					Cimage->DrawSolidRect((float)mainobject[i]->set_x(), (float)mainobject[i]->set_y(), 0, 2, 0.5f, 0.2f, 0.7f, 1);
+					break;
+				case 2:
+					Cimage->DrawSolidRect((float)mainobject[i]->set_x(), (float)mainobject[i]->set_y(), 0, 2, 1.0f, 1.0f, 0.0f, 1);
+					break;
+				}
 				break;
 			}
 			
@@ -148,7 +203,7 @@ void SceneMgr::draw()
 }
 
 
-void SceneMgr::get_object(float x, float y, int get_type)
+void SceneMgr::get_object(float x, float y, int get_type, int Iteam)
 {
 	int tmp = 0;
 
@@ -157,7 +212,7 @@ void SceneMgr::get_object(float x, float y, int get_type)
 		if (!list[i])
 		{
 			type[i] = get_type;
-			mainobject[i] = new object(x, y, type[i]);
+			mainobject[i] = new object(x, y, type[i], Iteam);
 			list[i] = true;
 			
 			break;
@@ -175,7 +230,7 @@ void SceneMgr::get_object(float x, float y, int get_type)
 	else if (tmp == num && num < max - 1)
 	{
 		type[num] = get_type;
-		mainobject[num] = new object(x, y, type[num]);
+		mainobject[num] = new object(x, y, type[num], 1);
 		list[num] = true;
 	
 		num += 1;
@@ -218,114 +273,117 @@ void SceneMgr::cul_object(int i, int j)
 	double jx = mainobject[j]->set_x();
 	double jy = mainobject[j]->set_y();
 
-	switch (type[i])
+	if (mainobject[i]->set_Iteam() != mainobject[j]->set_Iteam())
 	{
-	case object_character:
-		switch (type[j])
+		switch (type[i])
 		{
 		case object_character:
-			break;
-		case object_building:
-			break;
-		case object_bullet:
-		case object_arrow:
-			if (-8 < ix - jx && ix - jx < 8)
+			switch (type[j])
 			{
-				if (-8 < iy - jy && iy - jy < 8)
+			case object_character:
+				break;
+			case object_building:
+				break;
+			case object_bullet:
+			case object_arrow:
+				if (-8 < ix - jx && ix - jx < 8)
 				{
-					mainobject[i]->minus_life(mainobject[j]->set_life());
-					mainobject[j]->minus_life(mainobject[j]->set_life());
+					if (-8 < iy - jy && iy - jy < 8)
+					{
+						mainobject[i]->minus_life(mainobject[j]->set_life());
+						mainobject[j]->minus_life(mainobject[j]->set_life());
+					}
 				}
-			}
-			break;
-		}
-		break;
-	case object_building:
-		switch (type[j])
-		{
-		case object_character:
-			if (-40 < ix - jx && ix - jx < 40)
-			{
-				if (-40 < iy - jy && iy - jy < 40)
-				{
-					mainobject[i]->minus_life(mainobject[j]->set_life());
-					mainobject[j]->minus_life(mainobject[j]->set_life());
-				}
+				break;
 			}
 			break;
 		case object_building:
-			break;
+			switch (type[j])
+			{
+			case object_character:
+				if (-40 < ix - jx && ix - jx < 40)
+				{
+					if (-40 < iy - jy && iy - jy < 40)
+					{
+						mainobject[i]->minus_life(mainobject[j]->set_life());
+						mainobject[j]->minus_life(mainobject[j]->set_life());
+					}
+				}
+				break;
+			case object_building:
+				break;
+			case object_bullet:
+				break;
+			case object_arrow:
+				if (-40 < ix - jx && ix - jx < 40)
+				{
+					if (-40 < iy - jy && iy - jy < 40)
+					{
+						mainobject[i]->minus_life(mainobject[j]->set_life());
+						mainobject[j]->minus_life(mainobject[j]->set_life());
+					}
+				}
+				break;
+			}
 		case object_bullet:
+			switch (type[j])
+			{
+			case object_character:
+				if (-25 < ix - jx && ix - jx < 25)
+				{
+					if (-25 < iy - jy && iy - jy < 25)
+					{
+						mainobject[i]->minus_life(mainobject[j]->set_life());
+						mainobject[j]->minus_life(mainobject[j]->set_life());
+					}
+				}
+				break;
+			case object_building:
+				break;
+			case object_bullet:
+				break;
+			case object_arrow:
+				break;
+			}
 			break;
 		case object_arrow:
-			if (-40 < ix - jx && ix - jx < 40)
+			switch (type[j])
 			{
-				if (-40 < iy - jy && iy - jy < 40)
+			case object_character:
+				if (-25 < ix - jx && ix - jx < 25)
 				{
-					mainobject[i]->minus_life(mainobject[j]->set_life());
-					mainobject[j]->minus_life(mainobject[j]->set_life());
+					if (-25 < iy - jy && iy - jy < 25)
+					{
+						mainobject[i]->minus_life(mainobject[j]->set_life());
+						mainobject[j]->minus_life(mainobject[j]->set_life());
+					}
 				}
+				break;
+			case object_building:
+				if (-25 < ix - jx && ix - jx < 25)
+				{
+					if (-25 < iy - jy && iy - jy < 25)
+					{
+						mainobject[i]->minus_life(mainobject[j]->set_life());
+						mainobject[j]->minus_life(mainobject[j]->set_life());
+					}
+				}
+				break;
+			case object_bullet:
+				break;
+			case object_arrow:
+				break;
 			}
 			break;
 		}
-	case object_bullet:
-		switch (type[j])
-		{
-		case object_character:
-			if (-25 < ix - jx && ix - jx < 25)
-			{
-				if (-25 < iy - jy && iy - jy < 25)
-				{
-					mainobject[i]->minus_life(mainobject[j]->set_life());
-					mainobject[j]->minus_life(mainobject[j]->set_life());
-				}
-			}
-			break;
-		case object_building:
-			break;
-		case object_bullet:
-			break;
-		case object_arrow:
-			break;
-		}
-		break;
-	case object_arrow:
-		switch (type[j])
-		{
-		case object_character:
-			if (-25 < ix - jx && ix - jx < 25)
-			{
-				if (-25 < iy - jy && iy - jy < 25)
-				{
-					mainobject[i]->minus_life(mainobject[j]->set_life());
-					mainobject[j]->minus_life(mainobject[j]->set_life());
-				}
-			}
-			break;
-		case object_building:
-			if (-25 < ix - jx && ix - jx < 25)
-			{
-				if (-25 < iy - jy && iy - jy < 25)
-				{
-					mainobject[i]->minus_life(mainobject[j]->set_life());
-					mainobject[j]->minus_life(mainobject[j]->set_life());
-				}
-			}
-			break;
-		case object_bullet:
-			break;
-		case object_arrow:
-			break;
-		}
-		break;
-	}
-	
-	
-	if (mainobject[i]->set_life() <= 0)
-		del_object(i);
 
-	if (mainobject[j]->set_life() <= 0)
-		del_object(j);
+
+		if (mainobject[i]->set_life() <= 0)
+			del_object(i);
+
+		if (mainobject[j]->set_life() <= 0)
+			del_object(j);
+	}
 	
 }
 

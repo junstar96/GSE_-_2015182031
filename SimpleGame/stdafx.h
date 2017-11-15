@@ -8,5 +8,5 @@
 extern int x_size;
 extern int y_size;
 
-extern bool Bclick;
-extern float FmakeTime;
+
+extern int FmakeTime;

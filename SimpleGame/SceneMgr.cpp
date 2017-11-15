@@ -103,6 +103,7 @@ void SceneMgr::update()
 	if (bullet_flag - time_cut>= 1)
 	{
 		time_cut += 1;
+		FmakeTime += 1;
 	}
 
 	for (int i = 0; i < num; ++i)

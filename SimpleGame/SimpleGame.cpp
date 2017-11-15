@@ -47,7 +47,11 @@ void MouseInput(int button, int state, int x, int y)
 	case GLUT_LEFT_BUTTON:
 		if (state == GLUT_UP)
 		{
-			//test->get_object((double)(x - x_size/2), (double)(y_size/2 - y), 1);
+			if ((y_size / 2 - y) < 0 && FmakeTime >= 2)
+			{
+				test->get_object((double)(x - x_size / 2), (double)(y_size / 2 - y), object_character, 2);
+				FmakeTime = 0;
+			}
 		}
 		break;
 	}

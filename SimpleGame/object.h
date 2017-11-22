@@ -8,6 +8,8 @@
 #define team_nt 1
 #define team_ws 2
 
+
+
 struct vect  // 1은 y = 위쪽, x = 오른쪽, 2는 y = 아래쪽, x = 왼쪽
 {
 	float x;

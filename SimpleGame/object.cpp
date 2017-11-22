@@ -84,7 +84,6 @@ void object::update(float get_time, int type)
 
 		time = get_time;
 		speed = 5;
-		//life -= 1; , 이거 그 때 라이프타임
 		break;
 	case 2:
 		break;
@@ -119,22 +118,22 @@ void object::update(float get_time, int type)
 		break;
 	case 4:
 
-		if (x >= x_size/2)
+		if (x >= x_size / 2)
 		{
-			v.x = v.x * (-1);
+			life = 0;
 		}
-		else if (x <= -(x_size/2))
+		else if (x <= -(x_size / 2))
 		{
-			v.x = v.x * (-1);
+			life = 0;
 		}
 
-		if (y >= y_size/2)
+		if (y >= y_size / 2)
 		{
-			v.y = v.y *(-1);
+			life = 0;
 		}
-		else if (y <= -(y_size/2))
+		else if (y <= -(y_size / 2))
 		{
-			v.y = v.y *(-1);
+			life = 0;
 		}
 
 		

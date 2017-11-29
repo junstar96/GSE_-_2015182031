@@ -9,12 +9,19 @@ float start_time;
 #define character_half 30
 #define build_half 50
 
+int move_image_x = 0;
+int move_image_y = 0;
+float particle_time = 0.0f;
+
 SceneMgr::SceneMgr()
 {
 	Cimage = new Renderer(x_size, y_size);
 	start_time = (float)timeGetTime()*0.001f;
 	m_Block_ID[0] = Cimage->CreatePngTexture("./resource/perfect_first.PNG");
 	m_Block_ID[1] = Cimage->CreatePngTexture("./resource/runrun.PNG");
+	background = Cimage->CreatePngTexture("./resource/addbuck.PNG");
+	sprite = Cimage->CreatePngTexture("./resource/sprite_image.PNG");
+	bullet_image = Cimage->CreatePngTexture("./resource/bullet.PNG");
 	for (int i = 0; i < 3; ++i)
 	{
 		type[2*i] = object_building;
@@ -71,6 +78,17 @@ void SceneMgr::update()
 	float time = timeGetTime()*0.001f;
 	float bullet_flag = time - start_time;
 	static float time_cut = 0;
+
+	if (move_image_x == 7)
+	{
+		move_image_x = 0;
+		move_image_y = (move_image_y + 1) % 3;
+	}
+	else
+	{
+		move_image_x += 1;
+	}
+	particle_time += 0.1;
 
 	printf("%f\n", bullet_flag - (float)time_cut);
 	printf("%d\n", mainobject[0]->set_Iteam());
@@ -146,6 +164,8 @@ void SceneMgr::update()
 
 void SceneMgr::draw()
 {
+	
+	Cimage->DrawTexturedRect(0, 0, 0, 800, 1.0f, 1.0f, 1.0f, 1, background, 0.9);
 	for (int i = 0; i < num; ++i)
 	{
 		if (list[i] == true)
@@ -158,12 +178,14 @@ void SceneMgr::draw()
 				case 1:
 					Cimage->DrawSolidRectGauge((float)mainobject[i]->set_x(), (float)mainobject[i]->set_y() + 20, 0, 30, 5, 1.0f, 0.0f, 0.0f, 1,
 						(float)mainobject[i]->set_life() / 100.0, 0.1);
-					Cimage->DrawSolidRect((float)mainobject[i]->set_x(), (float)mainobject[i]->set_y(), 0, 30, 1.0f, 0.0f, 0.0f, 1, 0.2);
+					Cimage->DrawTexturedRectSeq((float)mainobject[i]->set_x(), (float)mainobject[i]->set_y(), 0, 30, 1.0f, 0.0f, 1.0f, 1,
+						sprite, move_image_x, move_image_y, 8, 3, 0.2);
 					break;
 				case 2:
 					Cimage->DrawSolidRectGauge((float)mainobject[i]->set_x(), (float)mainobject[i]->set_y() + 20, 0, 30, 5, 0.0f, 0.0f, 1.0f, 1,
 						(float)mainobject[i]->set_life() / 100.0, 0.1);
-					Cimage->DrawSolidRect((float)mainobject[i]->set_x(), (float)mainobject[i]->set_y(), 0, 30, 0.0f, 0.0f, 1.0f, 1, 0.2);
+					Cimage->DrawTexturedRectSeq((float)mainobject[i]->set_x(), (float)mainobject[i]->set_y(), 0, 30, 1.0f, 1.0f, 1.0f, 1,
+						sprite, move_image_x, move_image_y, 8, 3, 0.2);
 					break;
 				}
 				break;
@@ -189,12 +211,13 @@ void SceneMgr::draw()
 				switch (mainobject[i]->set_Iteam())
 				{
 				case 1:
-					Cimage->DrawSolidRect((float)mainobject[i]->set_x(), (float)mainobject[i]->set_y(), 0, 2, 1.0f, 0.0f, 0.0f, 1, 0.3);
+					//Cimage->DrawSolidRect((float)mainobject[i]->set_x(), (float)mainobject[i]->set_y(), 0, 2, 1.0f, 0.0f, 0.0f, 1, 0.3);
+					Cimage->DrawParticle((float)mainobject[i]->set_x(), (float)mainobject[i]->set_y(), 0, 2, 1.0f, 1.0f, 1.0f, 1,
+						-mainobject[i]->set_speed_x(), -mainobject[i]->set_speed_y(), bullet_image, particle_time);
 					break;
 				case 2:
-					Cimage->DrawSolidRectGauge((float)mainobject[i]->set_x(), (float)mainobject[i]->set_y() + 20, 0, 30, 5, 0.0f, 0.0f, 1.0f, 1,
-						(float)mainobject[i]->set_life() / 100.0, 0.1);
-					Cimage->DrawSolidRect((float)mainobject[i]->set_x(), (float)mainobject[i]->set_y(), 0, 2, 0.0f, 0.0f, 1.0f, 1, 0.3);
+					Cimage->DrawParticle((float)mainobject[i]->set_x(), (float)mainobject[i]->set_y(), 0, 2, 1.0f, 1.0f, 1.0f, 1,
+						-mainobject[i]->set_speed_x(), -mainobject[i]->set_speed_y(), bullet_image, particle_time);
 					break;
 				}
 				break;
@@ -301,7 +324,7 @@ void SceneMgr::cul_object(int i, int j)
 					if (-50 < iy - jy && iy - jy < 50)
 					{
 						mainobject[i]->minus_life(mainobject[j]->set_life());
-						mainobject[j]->minus_life(mainobject[j]->set_life());
+						mainobject[j]->minus_life(mainobject[i]->set_life());
 					}
 				}
 				break;
@@ -311,7 +334,7 @@ void SceneMgr::cul_object(int i, int j)
 					if (-15 < iy - jy && iy - jy < 15)
 					{
 						mainobject[i]->minus_life(mainobject[j]->set_life());
-						mainobject[j]->minus_life(mainobject[j]->set_life());
+						mainobject[j]->minus_life(mainobject[i]->set_life());
 					}
 				}
 				break;
@@ -321,7 +344,7 @@ void SceneMgr::cul_object(int i, int j)
 					if (-15 < iy - jy && iy - jy < 15)
 					{
 						mainobject[i]->minus_life(mainobject[j]->set_life());
-						mainobject[j]->minus_life(mainobject[j]->set_life());
+						mainobject[j]->minus_life(mainobject[i]->set_life());
 					}
 				}
 				break;
@@ -336,7 +359,7 @@ void SceneMgr::cul_object(int i, int j)
 					if (-50 < iy - jy && iy - jy < 50)
 					{
 						mainobject[i]->minus_life(mainobject[j]->set_life());
-						mainobject[j]->minus_life(mainobject[j]->set_life());
+						mainobject[j]->minus_life(mainobject[i]->set_life());
 					}
 				}
 				break;
@@ -348,7 +371,7 @@ void SceneMgr::cul_object(int i, int j)
 					if (-50 < iy - jy && iy - jy < 50)
 					{
 						mainobject[i]->minus_life(mainobject[j]->set_life());
-						mainobject[j]->minus_life(mainobject[j]->set_life());
+						mainobject[j]->minus_life(mainobject[i]->set_life());
 					}
 				}
 				break;
@@ -358,7 +381,7 @@ void SceneMgr::cul_object(int i, int j)
 					if (-50 < iy - jy && iy - jy < 50)
 					{
 						mainobject[i]->minus_life(mainobject[j]->set_life());
-						mainobject[j]->minus_life(mainobject[j]->set_life());
+						mainobject[j]->minus_life(mainobject[i]->set_life());
 					}
 				}
 				break;
@@ -371,8 +394,8 @@ void SceneMgr::cul_object(int i, int j)
 				{
 					if (-15 < iy - jy && iy - jy < 15)
 					{
-						mainobject[i]->minus_life(mainobject[i]->set_life());
-						mainobject[j]->minus_life(mainobject[j]->set_life());
+						mainobject[i]->minus_life(mainobject[j]->set_life());
+						mainobject[j]->minus_life(mainobject[i]->set_life());
 					}
 				}
 				break;
@@ -382,7 +405,7 @@ void SceneMgr::cul_object(int i, int j)
 					if (-50 < iy - jy && iy - jy < 50)
 					{
 						mainobject[i]->minus_life(mainobject[j]->set_life());
-						mainobject[j]->minus_life(mainobject[j]->set_life());
+						mainobject[j]->minus_life(mainobject[i]->set_life());
 					}
 				}
 				break;
@@ -401,7 +424,7 @@ void SceneMgr::cul_object(int i, int j)
 					if (-15 < iy - jy && iy - jy < 15)
 					{
 						mainobject[i]->minus_life(mainobject[j]->set_life());
-						mainobject[j]->minus_life(mainobject[j]->set_life());
+						mainobject[j]->minus_life(mainobject[i]->set_life());
 					}
 				}
 				break;
@@ -411,7 +434,7 @@ void SceneMgr::cul_object(int i, int j)
 					if (-50 < iy - jy && iy - jy < 50)
 					{
 						mainobject[i]->minus_life(mainobject[j]->set_life());
-						mainobject[j]->minus_life(mainobject[j]->set_life());
+						mainobject[j]->minus_life(mainobject[i]->set_life());
 					}
 				}
 				break;

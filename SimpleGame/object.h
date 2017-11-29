@@ -81,4 +81,14 @@ public:
 	{
 		return Iteam;
 	}
+
+	float set_speed_x() const
+	{
+		return v.x * speed;
+	}
+
+	float set_speed_y() const
+	{
+		return v.y * speed;
+	}
 };

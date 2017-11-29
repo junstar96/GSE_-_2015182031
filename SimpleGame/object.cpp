@@ -3,12 +3,21 @@
 
 object::object()
 {
+	int temp = rand() % 2 + 1;
 	time = 0;
 	life = 100.0;
 	x = 400;
 	y = 300;
 	v.x = cos((float)(rand()%361 - 180)*0.01f);
-	v.y = sin((float)(rand()%361 - 180)*0.01f);
+	switch (temp)
+	{
+	case 1:
+		v.y = sqrt(1 - v.x * v.x);
+		break;
+	case 2:
+		v.y = -sqrt(1 - v.x * v.x);
+		break;
+	}
 	speed = 1;
 	color_num = 0;
 	

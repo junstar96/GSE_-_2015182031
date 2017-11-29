@@ -18,6 +18,8 @@ private:
 	object* mainobject[max];
 	Renderer* Cimage = NULL;
 	GLuint m_Block_ID[2];
+	GLuint background;
+	GLuint sprite, bullet_image;
 public:
 	SceneMgr();
 	~SceneMgr();
@@ -34,5 +36,6 @@ public:
 
 	
 	void cul_object(int i, int j);
+
 
 };

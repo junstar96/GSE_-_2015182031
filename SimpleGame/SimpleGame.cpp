@@ -12,7 +12,7 @@ but WITHOUT ANY WARRANTY.
 #include <iostream>
 #include "Dependencies\glew.h"
 #include "Dependencies\freeglut.h"
-
+#include "Renderer.h"
 #include "SceneMgr.h"
 
 SceneMgr* test = NULL;
@@ -27,7 +27,8 @@ void RenderScene(void)
 	glClearDepth(1.f);
 
 	test->draw();
-	
+
+
 
 
 	glutSwapBuffers();
@@ -75,7 +76,6 @@ void KeyInput(unsigned char key, int x, int y)
 		break;
 	case 'w':
 	case 'W':
-	
 		break;
 	case 's':
 	case 'S':

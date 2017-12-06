@@ -1,23 +1,23 @@
 ﻿  SceneMgr.cpp
 c:\users\이준성\desktop\구루구루 이미지 폴더\프로그램 파일 관리\game_software\gse_2_2015182031\simplegame\object.h(87): warning C4244: 'return': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
 c:\users\이준성\desktop\구루구루 이미지 폴더\프로그램 파일 관리\game_software\gse_2_2015182031\simplegame\object.h(92): warning C4244: 'return': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-c:\users\이준성\desktop\구루구루 이미지 폴더\프로그램 파일 관리\game_software\gse_2_2015182031\simplegame\scenemgr.cpp(91): warning C4305: '+=': 'double'에서 'float'(으)로 잘립니다.
-c:\users\이준성\desktop\구루구루 이미지 폴더\프로그램 파일 관리\game_software\gse_2_2015182031\simplegame\scenemgr.cpp(105): warning C4244: '인수': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\users\이준성\desktop\구루구루 이미지 폴더\프로그램 파일 관리\game_software\gse_2_2015182031\simplegame\scenemgr.cpp(65): error C3688: 잘못된 리터럴 접두사 'f'입니다. 리터럴 연산자 또는 리터럴 연산자 템플릿 '연산자 ""f'을(를) 찾을 수 없습니다.
+c:\users\이준성\desktop\구루구루 이미지 폴더\프로그램 파일 관리\game_software\gse_2_2015182031\simplegame\scenemgr.cpp(99): warning C4305: '+=': 'double'에서 'float'(으)로 잘립니다.
 c:\users\이준성\desktop\구루구루 이미지 폴더\프로그램 파일 관리\game_software\gse_2_2015182031\simplegame\scenemgr.cpp(111): warning C4244: '인수': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-c:\users\이준성\desktop\구루구루 이미지 폴더\프로그램 파일 관리\game_software\gse_2_2015182031\simplegame\scenemgr.cpp(121): warning C4244: '인수': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-c:\users\이준성\desktop\구루구루 이미지 폴더\프로그램 파일 관리\game_software\gse_2_2015182031\simplegame\scenemgr.cpp(168): warning C4305: '인수': 'double'에서 'float'(으)로 잘립니다.
-c:\users\이준성\desktop\구루구루 이미지 폴더\프로그램 파일 관리\game_software\gse_2_2015182031\simplegame\scenemgr.cpp(180): warning C4305: '인수': 'double'에서 'float'(으)로 잘립니다.
-c:\users\이준성\desktop\구루구루 이미지 폴더\프로그램 파일 관리\game_software\gse_2_2015182031\simplegame\scenemgr.cpp(180): warning C4244: '인수': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-c:\users\이준성\desktop\구루구루 이미지 폴더\프로그램 파일 관리\game_software\gse_2_2015182031\simplegame\scenemgr.cpp(182): warning C4305: '인수': 'double'에서 'float'(으)로 잘립니다.
-c:\users\이준성\desktop\구루구루 이미지 폴더\프로그램 파일 관리\game_software\gse_2_2015182031\simplegame\scenemgr.cpp(186): warning C4305: '인수': 'double'에서 'float'(으)로 잘립니다.
-c:\users\이준성\desktop\구루구루 이미지 폴더\프로그램 파일 관리\game_software\gse_2_2015182031\simplegame\scenemgr.cpp(186): warning C4244: '인수': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-c:\users\이준성\desktop\구루구루 이미지 폴더\프로그램 파일 관리\game_software\gse_2_2015182031\simplegame\scenemgr.cpp(188): warning C4305: '인수': 'double'에서 'float'(으)로 잘립니다.
+c:\users\이준성\desktop\구루구루 이미지 폴더\프로그램 파일 관리\game_software\gse_2_2015182031\simplegame\scenemgr.cpp(117): warning C4244: '인수': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\users\이준성\desktop\구루구루 이미지 폴더\프로그램 파일 관리\game_software\gse_2_2015182031\simplegame\scenemgr.cpp(127): warning C4244: '인수': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\users\이준성\desktop\구루구루 이미지 폴더\프로그램 파일 관리\game_software\gse_2_2015182031\simplegame\scenemgr.cpp(177): warning C4305: '인수': 'double'에서 'float'(으)로 잘립니다.
+c:\users\이준성\desktop\구루구루 이미지 폴더\프로그램 파일 관리\game_software\gse_2_2015182031\simplegame\scenemgr.cpp(189): warning C4305: '인수': 'double'에서 'float'(으)로 잘립니다.
+c:\users\이준성\desktop\구루구루 이미지 폴더\프로그램 파일 관리\game_software\gse_2_2015182031\simplegame\scenemgr.cpp(189): warning C4244: '인수': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\users\이준성\desktop\구루구루 이미지 폴더\프로그램 파일 관리\game_software\gse_2_2015182031\simplegame\scenemgr.cpp(191): warning C4305: '인수': 'double'에서 'float'(으)로 잘립니다.
+c:\users\이준성\desktop\구루구루 이미지 폴더\프로그램 파일 관리\game_software\gse_2_2015182031\simplegame\scenemgr.cpp(195): warning C4305: '인수': 'double'에서 'float'(으)로 잘립니다.
+c:\users\이준성\desktop\구루구루 이미지 폴더\프로그램 파일 관리\game_software\gse_2_2015182031\simplegame\scenemgr.cpp(195): warning C4244: '인수': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
 c:\users\이준성\desktop\구루구루 이미지 폴더\프로그램 파일 관리\game_software\gse_2_2015182031\simplegame\scenemgr.cpp(197): warning C4305: '인수': 'double'에서 'float'(으)로 잘립니다.
-c:\users\이준성\desktop\구루구루 이미지 폴더\프로그램 파일 관리\game_software\gse_2_2015182031\simplegame\scenemgr.cpp(197): warning C4244: '인수': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-c:\users\이준성\desktop\구루구루 이미지 폴더\프로그램 파일 관리\game_software\gse_2_2015182031\simplegame\scenemgr.cpp(199): warning C4305: '인수': 'double'에서 'float'(으)로 잘립니다.
-c:\users\이준성\desktop\구루구루 이미지 폴더\프로그램 파일 관리\game_software\gse_2_2015182031\simplegame\scenemgr.cpp(203): warning C4305: '인수': 'double'에서 'float'(으)로 잘립니다.
-c:\users\이준성\desktop\구루구루 이미지 폴더\프로그램 파일 관리\game_software\gse_2_2015182031\simplegame\scenemgr.cpp(203): warning C4244: '인수': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-c:\users\이준성\desktop\구루구루 이미지 폴더\프로그램 파일 관리\game_software\gse_2_2015182031\simplegame\scenemgr.cpp(205): warning C4305: '인수': 'double'에서 'float'(으)로 잘립니다.
-c:\users\이준성\desktop\구루구루 이미지 폴더\프로그램 파일 관리\game_software\gse_2_2015182031\simplegame\scenemgr.cpp(228): warning C4305: '인수': 'double'에서 'float'(으)로 잘립니다.
-c:\users\이준성\desktop\구루구루 이미지 폴더\프로그램 파일 관리\game_software\gse_2_2015182031\simplegame\scenemgr.cpp(231): warning C4305: '인수': 'double'에서 'float'(으)로 잘립니다.
-  SimpleGame.vcxproj -> C:\Users\이준성\Desktop\구루구루 이미지 폴더\프로그램 파일 관리\game_software\GSE_2_2015182031\x64\Debug\SimpleGame.exe
+c:\users\이준성\desktop\구루구루 이미지 폴더\프로그램 파일 관리\game_software\gse_2_2015182031\simplegame\scenemgr.cpp(206): warning C4305: '인수': 'double'에서 'float'(으)로 잘립니다.
+c:\users\이준성\desktop\구루구루 이미지 폴더\프로그램 파일 관리\game_software\gse_2_2015182031\simplegame\scenemgr.cpp(206): warning C4244: '인수': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\users\이준성\desktop\구루구루 이미지 폴더\프로그램 파일 관리\game_software\gse_2_2015182031\simplegame\scenemgr.cpp(208): warning C4305: '인수': 'double'에서 'float'(으)로 잘립니다.
+c:\users\이준성\desktop\구루구루 이미지 폴더\프로그램 파일 관리\game_software\gse_2_2015182031\simplegame\scenemgr.cpp(214): warning C4305: '인수': 'double'에서 'float'(으)로 잘립니다.
+c:\users\이준성\desktop\구루구루 이미지 폴더\프로그램 파일 관리\game_software\gse_2_2015182031\simplegame\scenemgr.cpp(214): warning C4244: '인수': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\users\이준성\desktop\구루구루 이미지 폴더\프로그램 파일 관리\game_software\gse_2_2015182031\simplegame\scenemgr.cpp(216): warning C4305: '인수': 'double'에서 'float'(으)로 잘립니다.
+c:\users\이준성\desktop\구루구루 이미지 폴더\프로그램 파일 관리\game_software\gse_2_2015182031\simplegame\scenemgr.cpp(241): warning C4305: '인수': 'double'에서 'float'(으)로 잘립니다.
+c:\users\이준성\desktop\구루구루 이미지 폴더\프로그램 파일 관리\game_software\gse_2_2015182031\simplegame\scenemgr.cpp(244): warning C4305: '인수': 'double'에서 'float'(으)로 잘립니다.

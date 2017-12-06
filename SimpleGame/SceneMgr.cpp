@@ -16,12 +16,16 @@ float particle_time = 0.0f;
 SceneMgr::SceneMgr()
 {
 	Cimage = new Renderer(x_size, y_size);
+	m_sound = new Sound();
 	start_time = (float)timeGetTime()*0.001f;
+
 	m_Block_ID[0] = Cimage->CreatePngTexture("./resource/perfect_first.PNG");
 	m_Block_ID[1] = Cimage->CreatePngTexture("./resource/runrun.PNG");
 	background = Cimage->CreatePngTexture("./resource/addbuck.PNG");
 	sprite = Cimage->CreatePngTexture("./resource/sprite_image.PNG");
 	bullet_image = Cimage->CreatePngTexture("./resource/bullet.PNG");
+
+	soundBG = m_sound->CreateSound("./Dependencies/SoundSamples/MF-W-90.XM");
 	for (int i = 0; i < 3; ++i)
 	{
 		type[2*i] = object_building;
@@ -56,6 +60,10 @@ SceneMgr::SceneMgr()
 		list[2 * i + 1] = true;
 	}
 	num = 6;
+
+
+	m_sound->PlaySoundW(soundBG, true, 1.0f);
+
 }
 
 SceneMgr::~SceneMgr()
@@ -90,8 +98,6 @@ void SceneMgr::update()
 	}
 	particle_time += 0.1;
 
-	printf("%f\n", bullet_flag - (float)time_cut);
-	printf("%d\n", mainobject[0]->set_Iteam());
 
 	for (int i = 0; i < num; ++i)
 	{
@@ -120,12 +126,15 @@ void SceneMgr::update()
 			{
 				get_object(double(rand() % 500 - 250), double(rand() % 500), object_character, 1);
 			}
-	
+
+
 	if (bullet_flag - time_cut>= 1)
 	{
 		time_cut += 1;
 		FmakeTime += 1;
 	}
+
+	
 
 	for (int i = 0; i < num; ++i)
 	{
@@ -197,12 +206,16 @@ void SceneMgr::draw()
 						(float)mainobject[i]->set_life() / 500.0, 0.1);
 					Cimage->DrawTexturedRect((float)mainobject[i]->set_x(), (float)mainobject[i]->set_y(), 0, 80, 1.0f, 1.0f, 1.0f, 1,
 						m_Block_ID[0], 0.1);
+					Cimage->DrawTextW((float)mainobject[i]->set_x(), (float)mainobject[i]->set_y() - 50,
+						GLUT_BITMAP_TIMES_ROMAN_10, 0.0f, 0.0f, 0.0f, "building");
 					break;
 				case 2:
 					Cimage->DrawSolidRectGauge((float)mainobject[i]->set_x(), (float)mainobject[i]->set_y() + 60, 0, 80, 10, 0.0f, 0.0f, 1.0f, 1,
 						(float)mainobject[i]->set_life() / 500.0, 0.1);
 					Cimage->DrawTexturedRect((float)mainobject[i]->set_x(), (float)mainobject[i]->set_y(), 0, 80, 1.0f, 1.0f, 1.0f, 1,
 						m_Block_ID[1], 0.1);
+					Cimage->DrawTextW((float)mainobject[i]->set_x(), (float)mainobject[i]->set_y() - 50,
+						GLUT_BITMAP_TIMES_ROMAN_10, 0.0f, 0.0f, 0.0f, "building");
 					break;
 				}
 				
@@ -213,7 +226,7 @@ void SceneMgr::draw()
 				case 1:
 					//Cimage->DrawSolidRect((float)mainobject[i]->set_x(), (float)mainobject[i]->set_y(), 0, 2, 1.0f, 0.0f, 0.0f, 1, 0.3);
 					Cimage->DrawParticle((float)mainobject[i]->set_x(), (float)mainobject[i]->set_y(), 0, 2, 1.0f, 1.0f, 1.0f, 1,
-						-mainobject[i]->set_speed_x(), -mainobject[i]->set_speed_y(), bullet_image, particle_time);
+						-mainobject[i]->set_speed_x()/2, -mainobject[i]->set_speed_y(), bullet_image, particle_time);
 					break;
 				case 2:
 					Cimage->DrawParticle((float)mainobject[i]->set_x(), (float)mainobject[i]->set_y(), 0, 2, 1.0f, 1.0f, 1.0f, 1,
@@ -249,6 +262,10 @@ void SceneMgr::get_object(float x, float y, int get_type, int Iteam)
 		{
 			type[i] = get_type;
 			mainobject[i] = new object(x, y, type[i], Iteam);
+			if (mainobject[i] == NULL)
+			{
+				printf("문제 발생");
+			}
 			list[i] = true;
 			
 			break;
@@ -266,7 +283,7 @@ void SceneMgr::get_object(float x, float y, int get_type, int Iteam)
 	else if (tmp == num && num < max - 1)
 	{
 		type[num] = get_type;
-		mainobject[num] = new object(x, y, type[num], 1);
+		mainobject[num] = new object(x, y, type[num-1], 1);
 		list[num] = true;
 	
 		num += 1;
@@ -277,7 +294,7 @@ void SceneMgr::del_object()
 {
 	if (num > 0)
 	{
-		delete mainobject[num];
+		delete mainobject[num - 1];
 		list[num] = false;
 		num -= 1;
 	}
@@ -289,6 +306,10 @@ void SceneMgr::del_object(int i)
 	{
 		delete mainobject[i];
 		list[i] = false;
+		if (i == num)
+		{
+			num -= 1;
+		}
 	}
 }
 

@@ -3,6 +3,7 @@
 #include"Renderer.h"
 #include"object.h"
 #include"Sound.h"
+#include"timer.h"
 #include<Windows.h>
 #define max 100
 #define object_character 1
@@ -18,13 +19,15 @@ private:
 	int num;
 	object* mainobject[max];
 	Renderer* Cimage = NULL;
-
+	timer* object_time = NULL;
 
 	GLuint m_Block_ID[2];
 	GLuint background;
 	GLuint sprite, bullet_image;
 
 	GLuint soundBG;
+	GLuint bullet_crash;
+	GLuint snow;
 
 	Sound* m_sound;
 

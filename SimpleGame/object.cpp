@@ -28,8 +28,16 @@ object::object(double x, double y, int type, int get_team) : x(x), y(y), Iteam(g
 	
 	speed = 1.0;
 	time = 0;
-	v.x = cos((float)(rand())*0.01f);
-	v.y = sin((float)(rand())*0.01f);
+	v.x = cos((float)(rand() % 361 - 180)*0.01f);
+	switch (Iteam)
+	{
+	case 1:
+		v.y = -sqrt(1 - v.x * v.x);
+		break;
+	case 2:
+		v.y = sqrt(1 - v.x * v.x);
+		break;
+	}
 	color_num = 0;
 	switch (type)
 	{
@@ -122,8 +130,7 @@ void object::update(float get_time, int type)
 
 		x = x + speed * v.x;
 		y = y + speed * v.y;
-
-		speed = 10;
+		speed = 3;
 		break;
 	case 4:
 

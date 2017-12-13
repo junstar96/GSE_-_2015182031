@@ -2,6 +2,7 @@
 #include"SceneMgr.h"
 #include<Windows.h>
 #include"Mmsystem.h"
+#include"timer.h"
 #pragma comment(lib, "winmm.lib")
 
 float start_time;
@@ -11,12 +12,14 @@ float start_time;
 
 int move_image_x = 0;
 int move_image_y = 0;
-float particle_time = 0.0f;
+float snow_time = 0.0f;
+
 
 SceneMgr::SceneMgr()
 {
 	Cimage = new Renderer(x_size, y_size);
 	m_sound = new Sound();
+	object_time = new timer();
 	start_time = (float)timeGetTime()*0.001f;
 
 	m_Block_ID[0] = Cimage->CreatePngTexture("./resource/perfect_first.PNG");
@@ -24,8 +27,10 @@ SceneMgr::SceneMgr()
 	background = Cimage->CreatePngTexture("./resource/addbuck.PNG");
 	sprite = Cimage->CreatePngTexture("./resource/sprite_image.PNG");
 	bullet_image = Cimage->CreatePngTexture("./resource/bullet.PNG");
+	snow = Cimage->CreatePngTexture("./resource/snowflake.PNG");
 
 	soundBG = m_sound->CreateSound("./Dependencies/SoundSamples/MF-W-90.XM");
+	bullet_crash = m_sound->CreateSound("./Dependencies/SoundSamples/bell.WAV");
 	for (int i = 0; i < 3; ++i)
 	{
 		type[2*i] = object_building;
@@ -61,8 +66,8 @@ SceneMgr::SceneMgr()
 	}
 	num = 6;
 
-
-	m_sound->PlaySoundW(soundBG, true, 1.0f);
+	
+	m_sound->PlaySoundW(soundBG, false, 1.0f);
 
 }
 
@@ -96,11 +101,12 @@ void SceneMgr::update()
 	{
 		move_image_x += 1;
 	}
-	particle_time += 0.1;
 
+	snow_time += 0.1f;
 
 	for (int i = 0; i < num; ++i)
 	{
+		printf("개체 수 = %d\n", num);
 		if (list[i])
 		{
 			switch (type[i])
@@ -123,9 +129,9 @@ void SceneMgr::update()
 	}
 
 	if (bullet_flag - time_cut >= 1)
-			{
-				get_object(double(rand() % 500 - 250), double(rand() % 500), object_character, 1);
-			}
+	{
+		get_object(double(rand() % 500 - 250), double(rand() % 500), object_character, 1);
+	}
 
 
 	if (bullet_flag - time_cut>= 1)
@@ -173,8 +179,10 @@ void SceneMgr::update()
 
 void SceneMgr::draw()
 {
-	
+	//배경과 눈이미지
 	Cimage->DrawTexturedRect(0, 0, 0, 800, 1.0f, 1.0f, 1.0f, 1, background, 0.9);
+	Cimage->DrawParticleClimate(0, 0, 0, 1, 1, 1, 1, 1, -0.1, -0.1, snow, snow_time, 0.05);
+
 	for (int i = 0; i < num; ++i)
 	{
 		if (list[i] == true)
@@ -226,11 +234,13 @@ void SceneMgr::draw()
 				case 1:
 					//Cimage->DrawSolidRect((float)mainobject[i]->set_x(), (float)mainobject[i]->set_y(), 0, 2, 1.0f, 0.0f, 0.0f, 1, 0.3);
 					Cimage->DrawParticle((float)mainobject[i]->set_x(), (float)mainobject[i]->set_y(), 0, 2, 1.0f, 1.0f, 1.0f, 1,
-						-mainobject[i]->set_speed_x()/2, -mainobject[i]->set_speed_y(), bullet_image, particle_time);
+						-mainobject[i]->set_speed_x()/3, -mainobject[i]->set_speed_y()/3, bullet_image, object_time->get_time(i), 0.3);
+					object_time->set_time(0.1, i);
 					break;
 				case 2:
 					Cimage->DrawParticle((float)mainobject[i]->set_x(), (float)mainobject[i]->set_y(), 0, 2, 1.0f, 1.0f, 1.0f, 1,
-						-mainobject[i]->set_speed_x(), -mainobject[i]->set_speed_y(), bullet_image, particle_time);
+						-mainobject[i]->set_speed_x()/3, -mainobject[i]->set_speed_y()/3, bullet_image, object_time->get_time(i), 0.3);
+					object_time->set_time(0.1, i);
 					break;
 				}
 				break;
@@ -238,10 +248,10 @@ void SceneMgr::draw()
 				switch (mainobject[i]->set_Iteam())
 				{
 				case 1:
-					Cimage->DrawSolidRect((float)mainobject[i]->set_x(), (float)mainobject[i]->set_y(), 0, 2, 0.5f, 0.2f, 0.7f, 1, 0.3);
+					Cimage->DrawSolidRect((float)mainobject[i]->set_x(), (float)mainobject[i]->set_y(), 0, 20, 0.5f, 0.2f, 0.7f, 1, 0.3);
 					break;
 				case 2:
-					Cimage->DrawSolidRect((float)mainobject[i]->set_x(), (float)mainobject[i]->set_y(), 0, 2, 1.0f, 1.0f, 0.0f, 1, 0.3);
+					Cimage->DrawSolidRect((float)mainobject[i]->set_x(), (float)mainobject[i]->set_y(), 0, 20, 1.0f, 1.0f, 0.0f, 1, 0.3);
 					break;
 				}
 				break;
@@ -324,14 +334,13 @@ void SceneMgr::printf_point()
 
 void SceneMgr::cul_object(int i, int j)
 {
-	
-	double ix = mainobject[i]->set_x();
-	double iy = mainobject[i]->set_y();
-	double jx = mainobject[j]->set_x();
-	double jy = mainobject[j]->set_y();
-
 	if (mainobject[i]->set_Iteam() != mainobject[j]->set_Iteam())
 	{
+		double ix = mainobject[i]->set_x();
+		double iy = mainobject[i]->set_y();
+		double jx = mainobject[j]->set_x();
+		double jy = mainobject[j]->set_y();
+
 		switch (type[i])
 		{
 		case object_character:
@@ -393,6 +402,7 @@ void SceneMgr::cul_object(int i, int j)
 					{
 						mainobject[i]->minus_life(mainobject[j]->set_life());
 						mainobject[j]->minus_life(mainobject[i]->set_life());
+						m_sound->PlaySoundW(bullet_crash, false, 1.0f);
 					}
 				}
 				break;
@@ -418,6 +428,7 @@ void SceneMgr::cul_object(int i, int j)
 						mainobject[i]->minus_life(mainobject[j]->set_life());
 						mainobject[j]->minus_life(mainobject[i]->set_life());
 					}
+					
 				}
 				break;
 			case object_building:
@@ -428,6 +439,7 @@ void SceneMgr::cul_object(int i, int j)
 						mainobject[i]->minus_life(mainobject[j]->set_life());
 						mainobject[j]->minus_life(mainobject[i]->set_life());
 					}
+					
 				}
 				break;
 			case object_bullet:
@@ -456,6 +468,7 @@ void SceneMgr::cul_object(int i, int j)
 					{
 						mainobject[i]->minus_life(mainobject[j]->set_life());
 						mainobject[j]->minus_life(mainobject[i]->set_life());
+						
 					}
 				}
 				break;
@@ -469,10 +482,53 @@ void SceneMgr::cul_object(int i, int j)
 
 
 		if (mainobject[i]->set_life() <= 0)
+		{
+			printf("%d 삭제, 타입 : %d\n", i, type[i]);
+			switch (type[i])
+			{
+			case 1:
+				printf("캐릭\n");
+				break;
+			case 2:
+				printf("벽\n");
+				break;
+			case 3:
+				printf("총알\n");
+				break;
+			case 4:
+				printf("화살\n");
+				break;
+			default:
+				printf("타입 없다\n");
+				break;
+			}
 			del_object(i);
+		}
 
 		if (mainobject[j]->set_life() <= 0)
+		{
+			printf("%d 삭제, 타입 : %d\n", j, type[j]);
+			switch (type[j])
+			{
+			case 1:
+				printf("캐릭\n");
+				break;
+			case 2:
+				printf("벽\n");
+				break;
+			case 3:
+				printf("총알\n");
+				break;
+			case 4:
+				printf("화살\n");
+				break;
+			default:
+				printf("타입 없다\n");
+				break;
+			}
 			del_object(j);
+			
+		}
 	}
 	
 }

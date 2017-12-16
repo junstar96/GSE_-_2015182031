@@ -75,32 +75,53 @@ void object::update(float get_time, int type)
 	switch (type)
 	{
 	case 1:
-
-		if (x >= x_size/2)
+		switch (object_type)
 		{
-			v.x = v.x * (-1);
+		case 1:
+			if (x >= x_size / 2)
+			{
+				v.x = v.x * (-1);
+			}
+			else if (x <= -(x_size) / 2)
+			{
+				v.x = v.x * (-1);
+			}
+
+			if (y >= y_size / 2)
+			{
+				v.y = v.y *(-1);
+			}
+			else if (y <= -(y_size / 2))
+			{
+				v.y = v.y *(-1);
+			}
+
+
+
+			x = x + speed * v.x;
+			y = y + speed * v.y;
+
+			time = get_time;
+			speed = 5;
+			break;
+		case 2:
+
+			if (y >= y_size / 2)
+			{
+				v.y = v.y *(-1);
+			}
+			else if (y <= -(y_size / 2))
+			{
+				v.y = v.y *(-1);
+			}
+
+			y = y + speed * v.y;
+
+			time = get_time;
+			speed = 5;
+			break;
 		}
-		else if (x <= -(x_size)/2)
-		{
-			v.x = v.x * (-1);
-		}
-
-		if (y >= y_size/2)
-		{
-			v.y = v.y *(-1);
-		}
-		else if (y <= -(y_size/2))
-		{
-			v.y = v.y *(-1);
-		}
-
-
-
-		x = x  + speed * v.x;
-		y = y + speed * v.y;
-
-		time = get_time;
-		speed = 5;
+		
 		break;
 	case 2:
 		break;

@@ -26,8 +26,11 @@ SceneMgr::SceneMgr()
 	m_Block_ID[1] = Cimage->CreatePngTexture("./resource/runrun.PNG");
 	background = Cimage->CreatePngTexture("./resource/addbuck.PNG");
 	sprite = Cimage->CreatePngTexture("./resource/sprite_image.PNG");
+	//fly_monster = Cimage->CreatePngTexture("./resource/flying_image.PNG");
 	bullet_image = Cimage->CreatePngTexture("./resource/bullet.PNG");
 	snow = Cimage->CreatePngTexture("./resource/snowflake.PNG");
+
+
 
 	soundBG = m_sound->CreateSound("./Dependencies/SoundSamples/MF-W-90.XM");
 	bullet_crash = m_sound->CreateSound("./Dependencies/SoundSamples/bell.WAV");
@@ -104,21 +107,22 @@ void SceneMgr::update()
 
 	snow_time += 0.1f;
 
+	printf("현재 수 : %d\n", num);
 	for (int i = 0; i < num; ++i)
 	{
-		printf("개체 수 = %d\n", num);
 		if (list[i])
 		{
 			switch (type[i])
 			{
 			case object_character:
-				if (bullet_flag - time_cut >= 1)
+				if (bullet_flag - time_cut >= 2)
 				{
 					get_object(mainobject[i]->set_x(), mainobject[i]->set_y(), object_arrow, mainobject[i]->set_Iteam());
+					
 				}
 				break;
 			case object_building:
-				if (bullet_flag - time_cut>= 1)
+				if (bullet_flag - time_cut>= 2)
 				{
 					get_object(mainobject[i]->set_x(), mainobject[i]->set_y(), object_bullet, mainobject[i]->set_Iteam());	
 				}
@@ -128,16 +132,37 @@ void SceneMgr::update()
 		}
 	}
 
-	if (bullet_flag - time_cut >= 1)
+	if (bullet_flag - time_cut >= 2)
 	{
-		get_object(double(rand() % 500 - 250), double(rand() % 500), object_character, 1);
+		int temp = rand() % 2 + 1;
+		//get_object(double(rand() % 500 - 250), double(rand() % 500), object_character, 1);
+		switch (temp)
+		{
+		case 1:
+			get_object_character(double(rand() % 500 - 250), double(rand() % 500), 1, temp);
+			break;
+		case 2:
+			switch (rand() % 3)
+			{
+			case 0:
+				get_object_character(mainobject[0]->set_x(), mainobject[0]->set_vec_y(), 1, temp);
+				break;
+			case 1:
+				get_object_character(mainobject[2]->set_x(), mainobject[2]->set_vec_y(), 1, temp);
+				break;
+			case 2:
+				get_object_character(mainobject[4]->set_x(), mainobject[4]->set_vec_y(), 1, temp);
+				break;
+			}
+			break;
+		}
 	}
 
 
-	if (bullet_flag - time_cut>= 1)
+	if (bullet_flag - time_cut>= 2)
 	{
-		time_cut += 1;
-		FmakeTime += 1;
+		time_cut += 2;
+		FmakeTime += 2;
 	}
 
 	
@@ -277,7 +302,6 @@ void SceneMgr::get_object(float x, float y, int get_type, int Iteam)
 				printf("문제 발생");
 			}
 			list[i] = true;
-			
 			break;
 		}
 		else
@@ -293,7 +317,7 @@ void SceneMgr::get_object(float x, float y, int get_type, int Iteam)
 	else if (tmp == num && num < max - 1)
 	{
 		type[num] = get_type;
-		mainobject[num] = new object(x, y, type[num-1], 1);
+		mainobject[num] = new object(x, y, type[num], Iteam);
 		list[num] = true;
 	
 		num += 1;
@@ -306,6 +330,7 @@ void SceneMgr::del_object()
 	{
 		delete mainobject[num - 1];
 		list[num] = false;
+		type[num] = 0;
 		num -= 1;
 	}
 }
@@ -316,7 +341,8 @@ void SceneMgr::del_object(int i)
 	{
 		delete mainobject[i];
 		list[i] = false;
-		if (i == num)
+		type[i] = 0;
+		if (i == num - 1)
 		{
 			num -= 1;
 		}
@@ -427,6 +453,7 @@ void SceneMgr::cul_object(int i, int j)
 					{
 						mainobject[i]->minus_life(mainobject[j]->set_life());
 						mainobject[j]->minus_life(mainobject[i]->set_life());
+						m_sound->PlaySoundW(bullet_crash, false, 1.0f);
 					}
 					
 				}
@@ -438,6 +465,7 @@ void SceneMgr::cul_object(int i, int j)
 					{
 						mainobject[i]->minus_life(mainobject[j]->set_life());
 						mainobject[j]->minus_life(mainobject[i]->set_life());
+						m_sound->PlaySoundW(bullet_crash, false, 1.0f);
 					}
 					
 				}
@@ -483,7 +511,7 @@ void SceneMgr::cul_object(int i, int j)
 
 		if (mainobject[i]->set_life() <= 0)
 		{
-			printf("%d 삭제, 타입 : %d\n", i, type[i]);
+			printf("%d 삭제, 타입 : %d, 부딪힌 객체 : %d\n", i, type[i], j);
 			switch (type[i])
 			{
 			case 1:
@@ -533,4 +561,42 @@ void SceneMgr::cul_object(int i, int j)
 	
 }
 
+void SceneMgr::get_object_character(float x, float y, int lteam, int object_type)
+{
+	int tmp = 0;
+
+	for (int i = 0; i < num; ++i)
+	{
+		if (!list[i])
+		{
+			type[i] = object_character;
+			mainobject[i] = new object(x, y, type[i], lteam);
+			mainobject[i]->get_object_type(object_type);
+			if (mainobject[i] == NULL)
+			{
+				printf("문제 발생");
+			}
+			list[i] = true;
+			break;
+		}
+		else
+		{
+			tmp += 1;
+		}
+	}
+
+	if (tmp != num)
+	{
+		return;
+	}
+	else if (tmp == num && num < max - 1)
+	{
+		type[num] = object_character;
+		mainobject[num] = new object(x, y, type[num], lteam);
+		mainobject[num]->get_object_type(object_type);
+		list[num] = true;
+
+		num += 1;
+	}
+}
 

@@ -27,7 +27,7 @@ protected:
 	int life;
 	int Iteam;//팀을 구분하기 위한 변수
 	vect v;
-	
+	int object_type;
 
 public:
 	object();
@@ -91,4 +91,15 @@ public:
 	{
 		return v.y * speed;
 	}
+
+	void get_object_type(const int type)
+	{
+		object_type = type;
+	}
+
+	int set_object_type() const
+	{
+		return object_type;
+	}
+
 };

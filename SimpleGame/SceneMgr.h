@@ -24,7 +24,7 @@ private:
 	GLuint m_Block_ID[2];
 	GLuint background;
 	GLuint sprite, bullet_image;
-
+	GLuint fly_monster;
 	GLuint soundBG;
 	GLuint bullet_crash;
 	GLuint snow;
@@ -46,6 +46,7 @@ public:
 
 	void printf_point();
 
+	void get_object_character(float x, float y, int lteam, int object_type);
 	
 	void cul_object(int i, int j);
 

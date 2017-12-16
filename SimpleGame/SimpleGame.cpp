@@ -51,7 +51,7 @@ void MouseInput(int button, int state, int x, int y)
 		{
 			if ((y_size / 2 - y) < 0 && FmakeTime >= 2)
 			{
-				test->get_object((double)(x - x_size / 2), (double)(y_size / 2 - y), object_character, 2);
+				test->get_object_character((double)(x - x_size / 2), (double)(y_size / 2 - y), 2, 1);
 				FmakeTime = 0;
 			}
 		}
@@ -76,6 +76,11 @@ void KeyInput(unsigned char key, int x, int y)
 		break;
 	case 'w':
 	case 'W':
+		if ((y_size / 2 - y) < 0 && FmakeTime >= 2)
+		{
+			test->get_object_character((double)(x - x_size / 2), (double)(y_size / 2 - y), 2, 2);
+			FmakeTime = 0;
+		}
 		break;
 	case 's':
 	case 'S':

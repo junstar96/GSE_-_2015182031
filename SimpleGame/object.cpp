@@ -118,7 +118,7 @@ void object::update(float get_time, int type)
 			y = y + speed * v.y;
 
 			time = get_time;
-			speed = 5;
+			speed = 1;
 			break;
 		}
 		

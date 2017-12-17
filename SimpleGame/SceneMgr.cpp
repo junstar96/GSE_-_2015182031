@@ -26,11 +26,11 @@ SceneMgr::SceneMgr()
 	m_Block_ID[1] = Cimage->CreatePngTexture("./resource/runrun.PNG");
 	background = Cimage->CreatePngTexture("./resource/addbuck.PNG");
 	sprite = Cimage->CreatePngTexture("./resource/sprite_image.PNG");
-	//fly_monster = Cimage->CreatePngTexture("./resource/flying_image.PNG");
+	
 	bullet_image = Cimage->CreatePngTexture("./resource/bullet.PNG");
 	snow = Cimage->CreatePngTexture("./resource/snowflake.PNG");
 
-
+	fly_monster = Cimage->CreatePngTexture("./resource/snowflake.PNG");
 
 	soundBG = m_sound->CreateSound("./Dependencies/SoundSamples/MF-W-90.XM");
 	bullet_crash = m_sound->CreateSound("./Dependencies/SoundSamples/bell.WAV");
@@ -145,13 +145,13 @@ void SceneMgr::update()
 			switch (rand() % 3)
 			{
 			case 0:
-				get_object_character(mainobject[0]->set_x(), mainobject[0]->set_vec_y(), 1, temp);
+				get_object_character(mainobject[0]->set_x(), mainobject[0]->set_y(), 1, temp);
 				break;
 			case 1:
-				get_object_character(mainobject[2]->set_x(), mainobject[2]->set_vec_y(), 1, temp);
+				get_object_character(mainobject[2]->set_x(), mainobject[2]->set_y(), 1, temp);
 				break;
 			case 2:
-				get_object_character(mainobject[4]->set_x(), mainobject[4]->set_vec_y(), 1, temp);
+				get_object_character(mainobject[4]->set_x(), mainobject[4]->set_y(), 1, temp);
 				break;
 			}
 			break;
@@ -218,16 +218,36 @@ void SceneMgr::draw()
 				switch (mainobject[i]->set_Iteam())
 				{
 				case 1:
-					Cimage->DrawSolidRectGauge((float)mainobject[i]->set_x(), (float)mainobject[i]->set_y() + 20, 0, 30, 5, 1.0f, 0.0f, 0.0f, 1,
-						(float)mainobject[i]->set_life() / 100.0, 0.1);
-					Cimage->DrawTexturedRectSeq((float)mainobject[i]->set_x(), (float)mainobject[i]->set_y(), 0, 30, 1.0f, 0.0f, 1.0f, 1,
-						sprite, move_image_x, move_image_y, 8, 3, 0.2);
+					switch (mainobject[i]->set_object_type())
+					{
+					case 1:
+						Cimage->DrawSolidRectGauge((float)mainobject[i]->set_x(), (float)mainobject[i]->set_y() + 20, 0, 30, 5, 1.0f, 0.0f, 0.0f, 1,
+							(float)mainobject[i]->set_life() / 100.0, 0.1);
+						Cimage->DrawTexturedRectSeq((float)mainobject[i]->set_x(), (float)mainobject[i]->set_y(), 0, 30, 1.0f, 0.0f, 1.0f, 1,
+							sprite, move_image_x, move_image_y, 8, 3, 0.2);
+						break;
+					case 2:
+						Cimage->DrawTexturedRect((float)mainobject[i]->set_x(), (float)mainobject[i]->set_y(), 0, 30, 1.0f, 1.0f, 1.0f, 1,
+							fly_monster, 0.05);
+						break;
+					}
+					
 					break;
 				case 2:
-					Cimage->DrawSolidRectGauge((float)mainobject[i]->set_x(), (float)mainobject[i]->set_y() + 20, 0, 30, 5, 0.0f, 0.0f, 1.0f, 1,
-						(float)mainobject[i]->set_life() / 100.0, 0.1);
-					Cimage->DrawTexturedRectSeq((float)mainobject[i]->set_x(), (float)mainobject[i]->set_y(), 0, 30, 1.0f, 1.0f, 1.0f, 1,
-						sprite, move_image_x, move_image_y, 8, 3, 0.2);
+					switch (mainobject[i]->set_object_type())
+					{
+					case 1:
+						Cimage->DrawSolidRectGauge((float)mainobject[i]->set_x(), (float)mainobject[i]->set_y() + 20, 0, 30, 5, 0.0f, 0.0f, 1.0f, 1,
+							(float)mainobject[i]->set_life() / 100.0, 0.1);
+						Cimage->DrawTexturedRectSeq((float)mainobject[i]->set_x(), (float)mainobject[i]->set_y(), 0, 30, 1.0f, 1.0f, 1.0f, 1,
+							sprite, move_image_x, move_image_y, 8, 3, 0.2);
+						break;
+					case 2:
+						Cimage->DrawTexturedRect((float)mainobject[i]->set_x(), (float)mainobject[i]->set_y(), 0, 30, 1.0f, 1.0f, 1.0f, 1,
+							fly_monster, 0.05);
+						break;
+					}
+					
 					break;
 				}
 				break;

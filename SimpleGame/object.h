@@ -95,6 +95,19 @@ public:
 	void get_object_type(const int type)
 	{
 		object_type = type;
+		if (object_type == 2)
+		{
+			v.x = 0;
+			switch (Iteam)
+			{
+			case 1:
+				v.y = -1;
+				break;
+			case 2:
+				v.y = 1;
+				break;
+			}
+		}
 	}
 
 	int set_object_type() const

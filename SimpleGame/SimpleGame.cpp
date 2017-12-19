@@ -69,7 +69,6 @@ void KeyInput(unsigned char key, int x, int y)
 		delete test;
 		exit(1);
 		break;
-
 	case 'd':
 	case 'D':
 		test->del_object();

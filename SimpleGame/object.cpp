@@ -108,11 +108,11 @@ void object::update(float get_time, int type)
 
 			if (y >= y_size / 2)
 			{
-				v.y = v.y *(-1);
+				life = 0;
 			}
 			else if (y <= -(y_size / 2))
 			{
-				v.y = v.y *(-1);
+				life = 0;
 			}
 
 			y = y + speed * v.y;

@@ -227,6 +227,8 @@ void SceneMgr::draw()
 							sprite, move_image_x, move_image_y, 8, 3, 0.2);
 						break;
 					case 2:
+						Cimage->DrawSolidRectGauge((float)mainobject[i]->set_x(), (float)mainobject[i]->set_y() + 20, 0, 30, 5, 1.0f, 0.0f, 0.0f, 1,
+							(float)mainobject[i]->set_life() / 100.0, 0.1);
 						Cimage->DrawTexturedRect((float)mainobject[i]->set_x(), (float)mainobject[i]->set_y(), 0, 30, 1.0f, 1.0f, 1.0f, 1,
 							fly_monster, 0.05);
 						break;
@@ -243,6 +245,8 @@ void SceneMgr::draw()
 							sprite, move_image_x, move_image_y, 8, 3, 0.2);
 						break;
 					case 2:
+						Cimage->DrawSolidRectGauge((float)mainobject[i]->set_x(), (float)mainobject[i]->set_y() + 20, 0, 30, 5, 0.0f, 0.0f, 1.0f, 1,
+							(float)mainobject[i]->set_life() / 100.0, 0.1);
 						Cimage->DrawTexturedRect((float)mainobject[i]->set_x(), (float)mainobject[i]->set_y(), 0, 30, 1.0f, 1.0f, 1.0f, 1,
 							fly_monster, 0.05);
 						break;
@@ -344,6 +348,46 @@ void SceneMgr::get_object(float x, float y, int get_type, int Iteam)
 	}
 }
 
+void SceneMgr::get_object_character(float x, float y, int lteam, int object_type)
+{
+	int tmp = 0;
+
+	for (int i = 0; i < num; ++i)
+	{
+		if (!list[i])
+		{
+			type[i] = object_character;
+			mainobject[i] = new object(x, y, type[i], lteam);
+			mainobject[i]->get_object_type(object_type);
+			if (mainobject[i] == NULL)
+			{
+				printf("巩力 惯积");
+			}
+			list[i] = true;
+			break;
+		}
+		else
+		{
+			tmp += 1;
+		}
+	}
+
+	if (tmp != num)
+	{
+		return;
+	}
+	else if (tmp == num && num < max - 1)
+	{
+		type[num] = object_character;
+		mainobject[num] = new object(x, y, type[num], lteam);
+		mainobject[num]->get_object_type(object_type);
+		list[num] = true;
+
+		num += 1;
+	}
+}
+
+
 void SceneMgr::del_object()
 {
 	if (num > 0)
@@ -387,147 +431,178 @@ void SceneMgr::cul_object(int i, int j)
 		double jx = mainobject[j]->set_x();
 		double jy = mainobject[j]->set_y();
 
-		switch (type[i])
-		{
-		case object_character:
-			switch (type[j])
-			{
-			case object_character:
-				break;
-			case object_building:
-				if (-50 < ix - jx && ix - jx < 50)
-				{
-					if (-50 < iy - jy && iy - jy < 50)
-					{
-						mainobject[i]->minus_life(mainobject[j]->set_life());
-						mainobject[j]->minus_life(mainobject[i]->set_life());
-					}
-				}
-				break;
-			case object_bullet:
-				if (-15 < ix - jx && ix - jx < 15)
-				{
-					if (-15 < iy - jy && iy - jy < 15)
-					{
-						mainobject[i]->minus_life(mainobject[j]->set_life());
-						mainobject[j]->minus_life(mainobject[i]->set_life());
-					}
-				}
-				break;
-			case object_arrow:
-				if (-15 < ix - jx && ix - jx < 15)
-				{
-					if (-15 < iy - jy && iy - jy < 15)
-					{
-						mainobject[i]->minus_life(mainobject[j]->set_life());
-						mainobject[j]->minus_life(mainobject[i]->set_life());
-					}
-				}
-				break;
-			}
-			break;
-		case object_building:
-			switch (type[j])
-			{
-			case object_character:
-				if (-50 < ix - jx && ix - jx < 50)
-				{
-					if (-50 < iy - jy && iy - jy < 50)
-					{
-						mainobject[i]->minus_life(mainobject[j]->set_life());
-						mainobject[j]->minus_life(mainobject[i]->set_life());
-					}
-				}
-				break;
-			case object_building:
-				break;
-			case object_bullet:
-				if (-50 < ix - jx && ix - jx < 50)
-				{
-					if (-50 < iy - jy && iy - jy < 50)
-					{
-						mainobject[i]->minus_life(mainobject[j]->set_life());
-						mainobject[j]->minus_life(mainobject[i]->set_life());
-						m_sound->PlaySoundW(bullet_crash, false, 1.0f);
-					}
-				}
-				break;
-			case object_arrow:
-				if (-50 < ix - jx && ix - jx < 50)
-				{
-					if (-50 < iy - jy && iy - jy < 50)
-					{
-						mainobject[i]->minus_life(mainobject[j]->set_life());
-						mainobject[j]->minus_life(mainobject[i]->set_life());
-					}
-				}
-				break;
-			}
-		case object_bullet:
-			switch (type[j])
-			{
-			case object_character:
-				if (-15 < ix - jx && ix - jx < 15)
-				{
-					if (-15 < iy - jy && iy - jy < 15)
-					{
-						mainobject[i]->minus_life(mainobject[j]->set_life());
-						mainobject[j]->minus_life(mainobject[i]->set_life());
-						m_sound->PlaySoundW(bullet_crash, false, 1.0f);
-					}
-					
-				}
-				break;
-			case object_building:
-				if (-50 < ix - jx && ix - jx < 50)
-				{
-					if (-50 < iy - jy && iy - jy < 50)
-					{
-						mainobject[i]->minus_life(mainobject[j]->set_life());
-						mainobject[j]->minus_life(mainobject[i]->set_life());
-						m_sound->PlaySoundW(bullet_crash, false, 1.0f);
-					}
-					
-				}
-				break;
-			case object_bullet:
-				break;
-			case object_arrow:
-				break;
-			}
-			break;
-		case object_arrow:
-			switch (type[j])
-			{
-			case object_character:
-				if (-15 < ix - jx && ix - jx < 15)
-				{
-					if (-15 < iy - jy && iy - jy < 15)
-					{
-						mainobject[i]->minus_life(mainobject[j]->set_life());
-						mainobject[j]->minus_life(mainobject[i]->set_life());
-					}
-				}
-				break;
-			case object_building:
-				if (-50 < ix - jx && ix - jx < 50)
-				{
-					if (-50 < iy - jy && iy - jy < 50)
-					{
-						mainobject[i]->minus_life(mainobject[j]->set_life());
-						mainobject[j]->minus_life(mainobject[i]->set_life());
-						
-					}
-				}
-				break;
-			case object_bullet:
-				break;
-			case object_arrow:
-				break;
-			}
-			break;
-		}
+		double round = sqrt((ix - jx)*(ix - jx) + (iy - jy)*(iy - jy));
+		double re_vec_x = (ix - jx) / round;
+		double re_vec_y = (iy - jy) / round;
 
+		if (list[i])
+		{
+			switch (type[i])
+			{
+			case object_character:
+				if (list[j])
+				{
+					switch (type[j])
+					{
+					case object_character:
+						break;
+					case object_building:
+						if (-50 < ix - jx && ix - jx < 50)
+						{
+							if (-50 < iy - jy && iy - jy < 50)
+							{
+								mainobject[i]->minus_life(mainobject[j]->set_life());
+								mainobject[j]->minus_life(mainobject[i]->set_life());
+							}
+						}
+						break;
+					case object_bullet:
+						if (-15 < ix - jx && ix - jx < 15)
+						{
+							if (-15 < iy - jy && iy - jy < 15)
+							{
+								mainobject[i]->minus_life(mainobject[j]->set_life());
+								mainobject[j]->minus_life(mainobject[i]->set_life());
+							}
+						}
+						break;
+					case object_arrow:
+						if (-15 < ix - jx && ix - jx < 15)
+						{
+							if (-15 < iy - jy && iy - jy < 15)
+							{
+								mainobject[i]->minus_life(mainobject[j]->set_life());
+								mainobject[j]->minus_life(mainobject[i]->set_life());
+							}
+						}
+						break;
+					}
+				}
+				break;
+			case object_building:
+				if (list[j])
+				{
+					switch (type[j])
+					{
+					case object_character:
+						if (-50 < ix - jx && ix - jx < 50)
+						{
+							if (-50 < iy - jy && iy - jy < 50)
+							{
+								mainobject[i]->minus_life(mainobject[j]->set_life());
+								mainobject[j]->minus_life(mainobject[i]->set_life());
+							}
+						}
+						break;
+					case object_building:
+						break;
+					case object_bullet:
+						if (-50 < ix - jx && ix - jx < 50)
+						{
+							if (-50 < iy - jy && iy - jy < 50)
+							{
+								mainobject[i]->minus_life(mainobject[j]->set_life());
+								mainobject[j]->minus_life(mainobject[i]->set_life());
+								m_sound->PlaySoundW(bullet_crash, false, 1.0f);
+							}
+						}
+						break;
+					case object_arrow:
+						if (-50 < ix - jx && ix - jx < 50)
+						{
+							if (-50 < iy - jy && iy - jy < 50)
+							{
+
+							}
+						}
+					}
+				}
+				break;
+			case object_bullet:
+				if (list[j])
+				{
+					switch (type[j])
+					{
+					case object_character:
+						if (-15 < ix - jx && ix - jx < 15)
+						{
+							if (-15 < iy - jy && iy - jy < 15)
+							{
+								mainobject[i]->minus_life(mainobject[j]->set_life());
+								mainobject[j]->minus_life(mainobject[i]->set_life());
+								m_sound->PlaySoundW(bullet_crash, false, 1.0f);
+							}
+
+						}
+						break;
+					case object_building:
+						if (-100 < ix - jx && ix - jx < 100)
+						{
+							if (-100 < iy - jy && iy - jy < 100)
+							{
+								if (mainobject[i]->set_object_type() == 1)
+								{
+									mainobject[i]->get_vec_x(re_vec_x);
+									mainobject[i]->get_vec_y(re_vec_y);
+								}
+							}
+
+						}
+
+						if (-50 < ix - jx && ix - jx < 50)
+						{
+							if (-50 < iy - jy && iy - jy < 50)
+							{
+								mainobject[i]->minus_life(mainobject[j]->set_life());
+								mainobject[j]->minus_life(mainobject[i]->set_life());
+
+								m_sound->PlaySoundW(bullet_crash, false, 1.0f);
+							}
+
+						}
+						break;
+					case object_bullet:
+						break;
+					case object_arrow:
+						break;
+					}
+			}
+				break;
+			case object_arrow:
+				if (list[j])
+				{
+					switch (type[j])
+					{
+					case object_character:
+						if (-15 < ix - jx && ix - jx < 15)
+						{
+							if (-15 < iy - jy && iy - jy < 15)
+							{
+								mainobject[i]->minus_life(mainobject[j]->set_life());
+								mainobject[j]->minus_life(mainobject[i]->set_life());
+							}
+						}
+						break;
+					case object_building:
+						if (-50 < ix - jx && ix - jx < 50)
+						{
+							if (-50 < iy - jy && iy - jy < 50)
+							{
+								mainobject[i]->minus_life(mainobject[j]->set_life());
+								mainobject[j]->minus_life(mainobject[i]->set_life());
+
+							}
+						}
+						break;
+					case object_bullet:
+						break;
+					case object_arrow:
+						break;
+					}
+				}
+				break;
+			}
+		}
 
 		if (mainobject[i]->set_life() <= 0)
 		{
@@ -581,42 +656,4 @@ void SceneMgr::cul_object(int i, int j)
 	
 }
 
-void SceneMgr::get_object_character(float x, float y, int lteam, int object_type)
-{
-	int tmp = 0;
-
-	for (int i = 0; i < num; ++i)
-	{
-		if (!list[i])
-		{
-			type[i] = object_character;
-			mainobject[i] = new object(x, y, type[i], lteam);
-			mainobject[i]->get_object_type(object_type);
-			if (mainobject[i] == NULL)
-			{
-				printf("巩力 惯积");
-			}
-			list[i] = true;
-			break;
-		}
-		else
-		{
-			tmp += 1;
-		}
-	}
-
-	if (tmp != num)
-	{
-		return;
-	}
-	else if (tmp == num && num < max - 1)
-	{
-		type[num] = object_character;
-		mainobject[num] = new object(x, y, type[num], lteam);
-		mainobject[num]->get_object_type(object_type);
-		list[num] = true;
-
-		num += 1;
-	}
-}
 
